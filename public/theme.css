@@ -1,4 +1,4 @@
-/* theme.css - Complete theme system */
+/* theme.css - Minimalist Theme System (no glow, subtle sidebar) */
 
 /* Theme styles for entire site */
 body.theme-light {
@@ -15,134 +15,134 @@ body.theme-light {
   --text-muted: #6a6a6a;
   --border-color: #e0e0e0;
   --border-medium: #cccccc;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 body.theme-dark {
-  --bg-primary: #1e1e1e;
-  --bg-secondary: #2d2d2d;
-  --bg-sidebar: #2d2d2d;
-  --bg-input: #3a3a3a;
-  --bg-modal: #252525;
-  --bg-modal-sidebar: #2d2d2d;
-  --bg-modal-card: #333333;
-  --bg-modal-hover: #3a3a3a;
-  --text-primary: #ffffff;
-  --text-secondary: #b8b8b8;
-  --text-muted: #8c8c8c;
-  --border-color: #404040;
-  --border-medium: #505050;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #242424;
+  --bg-sidebar: #242424;
+  --bg-input: #2e2e2e;
+  --bg-modal: #1e1e1e;
+  --bg-modal-sidebar: #242424;
+  --bg-modal-card: #2a2a2a;
+  --bg-modal-hover: #303030;
+  --text-primary: #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #7a7a7a;
+  --border-color: #333333;
+  --border-medium: #444444;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
-/* Transitions */
 body {
   transition: background 0.3s ease, color 0.3s ease;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
-/* ---- ACCENT COLOR SYSTEM ---- */
+/* ---- ACCENT COLOR SYSTEM (Minimalist) ---- */
 :root {
   --accent: #fd6671;
-  --accent-hover: #ff7b85;
-  --accent-light: rgba(253, 102, 113, 0.15);
-  --accent-medium: rgba(253, 102, 113, 0.25);
-  --accent-dark: rgba(253, 102, 113, 0.45);
+  --accent-hover: #e85a64;
+  --accent-subtle: rgba(253, 102, 113, 0.08);
+  --accent-muted: rgba(253, 102, 113, 0.15);
 }
 
-/* 1. BUTTONS - All buttons use accent color */
-button:not(.btn-cancel):not(.logout-btn):not(.ch-action-btn):not(.dm-action-btn):not(.up-btn):not(.nav-item):not(.back-btn):not(.ftab):not(.msb-cancel),
-.btn:not(.btn-cancel),
-.button:not(.btn-cancel),
-[role="button"]:not(.btn-cancel),
-input[type="submit"],
-input[type="button"],
+/* 1. BUTTONS - Primary actions only */
+.btn-primary,
 .wv-new-btn,
-.new-message-btn,
 .add-friend-btn,
 .msb-delete,
 .edit-profile-btn,
-.discover-themes-btn {
+input[type="submit"] {
   background: var(--accent) !important;
   color: #ffffff !important;
-  border-color: var(--accent) !important;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  border: none !important;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-button:not(.btn-cancel):not(.logout-btn):not(.ch-action-btn):not(.dm-action-btn):not(.up-btn):not(.nav-item):not(.back-btn):not(.ftab):not(.msb-cancel):hover,
-.btn:not(.btn-cancel):hover,
-.button:not(.btn-cancel):hover,
-[role="button"]:not(.btn-cancel):hover,
-input[type="submit"]:hover,
-input[type="button"]:hover,
+.btn-primary:hover,
 .wv-new-btn:hover,
-.new-message-btn:hover,
 .add-friend-btn:hover,
 .msb-delete:hover,
 .edit-profile-btn:hover,
-.discover-themes-btn:hover {
+input[type="submit"]:hover {
   background: var(--accent-hover) !important;
-  border-color: var(--accent-hover) !important;
-  transform: scale(1.02);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(253, 102, 113, 0.2);
 }
 
-/* 2. ACTIVE/ SELECTED STATES - Use accent color */
+/* Secondary buttons - minimal outline style */
+.btn-secondary,
+.ftab,
+.nav-item {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid transparent !important;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.btn-secondary:hover,
+.ftab:hover,
+.nav-item:hover {
+  background: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* 2. ACTIVE STATES - Subtle left border indicator (no fill) */
 .nav-item.active,
 .settings-sidebar .nav-item-settings.active,
 .dm-item.active,
-.ftab.active,
-.sidebar-item.active,
-.channel-item.active,
-.tab-active,
-.selected {
-  background: var(--accent) !important;
-  color: #ffffff !important;
+.ftab.active {
+  background: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
+  border-left: 3px solid var(--accent) !important;
+  padding-left: calc(16px - 3px) !important; /* adjust for the border */
 }
 
-.nav-item.active svg,
-.settings-sidebar .nav-item-settings.active svg,
-.dm-item.active svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
+/* For sidebar items that have padding, we need to adjust */
+.nav-item.active,
+.settings-sidebar .nav-item-settings.active {
+  padding-left: 13px !important; /* 16 - 3 */
 }
 
+/* Keep the text color natural, no accent fill */
 .nav-item.active .dm-name,
 .nav-item.active .dm-preview,
-.nav-item.active .dm-time,
-.nav-item.active span,
 .dm-item.active .dm-name,
-.dm-item.active .dm-preview,
-.dm-item.active .dm-time {
-  color: #ffffff !important;
+.dm-item.active .dm-preview {
+  color: var(--text-primary) !important;
 }
 
-/* 3. LINKS - Use accent color */
-a:not(.no-accent),
-.link,
-.text-link {
+/* 3. LINKS - Only inline links, minimal */
+a:not(.no-accent) {
   color: var(--accent) !important;
+  text-decoration: none;
   transition: color 0.2s ease;
 }
 
-a:not(.no-accent):hover,
-.link:hover,
-.text-link:hover {
+a:not(.no-accent):hover {
   color: var(--accent-hover) !important;
   text-decoration: underline;
 }
 
-/* 4. INPUT FOCUS STATES */
+/* 4. INPUT FOCUS - No glow, just border change */
 input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--accent) !important;
-  outline: 2px solid var(--accent) !important;
-  outline-offset: 2px;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 #input-box:focus-within,
 #search-inner:focus-within {
   border-color: var(--accent) !important;
-  box-shadow: 0 0 0 2px var(--accent-light) !important;
+  box-shadow: none !important;
 }
 
 /* 5. TOGGLES & SWITCHES */
@@ -154,7 +154,7 @@ select:focus {
   background: #ffffff !important;
 }
 
-/* 6. CHECKBOXES & RADIOS */
+/* 6. CHECKBOXES - Minimal accent */
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
   accent-color: var(--accent) !important;
@@ -165,159 +165,131 @@ input[type="radio"]:checked {
   border-color: var(--accent) !important;
 }
 
-/* 7. AVATARS - Use accent as default */
+/* 7. AVATARS - Subtle default */
 .dm-avatar,
 .ch-avatar,
 .pc-avatar,
-.fr-avatar,
 #up-avatar,
 .pp-avatar,
 .mini-avatar {
   background: var(--accent) !important;
-}
-
-/* 8. BADGES & PILLS */
-.badge,
-.pill,
-.tag,
-.badge-settings {
-  background: var(--accent) !important;
   color: #ffffff !important;
 }
 
-/* 9. PROGRESS BARS */
-progress::-webkit-progress-value {
+/* 8. BADGES - Minimal */
+.badge,
+.badge-settings,
+.dm-badge {
   background: var(--accent) !important;
+  color: #ffffff !important;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 12px;
 }
 
-progress::-moz-progress-bar {
-  background: var(--accent) !important;
-}
-
-/* 10. RANGE SLIDERS */
-input[type="range"]::-webkit-slider-thumb {
-  background: var(--accent) !important;
-}
-
-input[type="range"]::-moz-range-thumb {
-  background: var(--accent) !important;
-}
-
-/* 11. REACTION PILLS */
+/* 9. REACTION PILLS - Subtle */
 .reaction-pill.mine {
-  background: var(--accent-light) !important;
+  background: var(--accent-subtle) !important;
   border-color: var(--accent) !important;
+  border: 1px solid var(--accent) !important;
 }
 
-/* 12. SEARCH HIGHLIGHTS */
+/* 10. SEARCH HIGHLIGHTS - Muted */
 mark,
 .search-hit,
 .msg-text mark {
-  background: var(--accent-dark) !important;
+  background: var(--accent-muted) !important;
   color: var(--text-primary) !important;
+  border-radius: 2px;
+  padding: 0 2px;
 }
 
-/* 13. MENTIONS - Fix for @username visibility in all themes */
+/* 11. MENTIONS - Always visible */
 .mention,
 .at-user,
 [class*="mention"] {
   color: var(--accent) !important;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-/* 14. HOVER EFFECTS */
-.hover-accent:hover,
-.dm-item:hover .dm-actions,
-.nav-item:hover {
-  background: var(--accent-light) !important;
-}
-
-/* 15. BORDER ACCENT */
-.border-accent {
-  border-color: var(--accent) !important;
-}
-
-/* 16. GRADIENTS - Use accent */
-.gradient,
-.brand-small,
-.welcome-logo pre {
+/* 12. BRAND - Gradient only */
+.brand-small {
   background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+  font-weight: 700;
 }
 
 .pp-banner {
-  -webkit-text-fill-color: unset !important;
   background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important;
 }
 
-/* 17. SCROLLBAR */
+/* 13. SCROLLBAR - Very subtle */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 ::-webkit-scrollbar-thumb {
-  background: var(--accent) !important;
+  background: var(--border-medium) !important;
   border-radius: 4px !important;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-hover) !important;
+  background: var(--text-muted) !important;
 }
 
-/* 18. SELECTION */
+/* 14. SELECTION - Minimal */
 ::selection {
-  background: var(--accent) !important;
-  color: #ffffff !important;
+  background: var(--accent-muted) !important;
+  color: var(--text-primary) !important;
 }
 
-/* 19. CONTEXT MENU */
+/* 15. CONTEXT MENU - Clean */
 .ctx-item:hover {
-  background: var(--accent) !important;
-  color: #ffffff !important;
+  background: var(--accent-subtle) !important;
+  color: var(--accent) !important;
 }
 
-/* 20. TOAST */
+/* 16. TOAST - Simple border accent */
 #toast {
-  border-color: var(--accent) !important;
+  border-left: 3px solid var(--accent) !important;
 }
 
-/* 21. MODAL HEADERS */
-.modal h2,
-.modal .modal-title {
+/* 17. PROFILE CARD - Subtle accent */
+.profile-card .pc-edit-btn:hover {
+  border-color: var(--accent) !important;
   color: var(--accent) !important;
 }
 
-/* 22. EMPTY STATES */
-.empty-state svg {
-  color: var(--accent) !important;
-  stroke: var(--accent) !important;
+/* 18. WELCOME CARD - Clean */
+.welcome-card {
+  border-top: 3px solid var(--accent) !important;
 }
 
-/* 23. DROPDOWN SELECTORS */
-select:focus,
-.font-selector select:focus {
-  border-color: var(--accent) !important;
-  outline: 2px solid var(--accent) !important;
+/* 19. CONVERSATION START - Clean */
+.conversation-start .start-header h1 {
+  color: var(--text-primary);
+}
+.conversation-start .start-header h4 {
+  color: var(--text-muted);
 }
 
-/* 24. LOADING SPINNERS */
-.loading,
-.spinner {
-  border-color: var(--accent) !important;
-  border-top-color: transparent !important;
-}
-
-/* Reset for buttons that should NOT use accent */
+/* Reset for buttons that should stay neutral */
 .btn-cancel,
 .logout-btn,
 .ch-action-btn,
 .dm-action-btn,
 .up-btn,
-.nav-item,
 .back-btn,
-.ftab,
-.msb-cancel {
+.msb-cancel,
+.ftab {
   background: transparent !important;
   color: var(--text-secondary) !important;
-  border-color: transparent !important;
+  border: none !important;
 }
 
 .btn-cancel:hover,
@@ -325,87 +297,13 @@ select:focus,
 .ch-action-btn:hover,
 .dm-action-btn:hover,
 .up-btn:hover,
-.nav-item:hover,
 .back-btn:hover,
-.ftab:hover,
 .msb-cancel:hover {
   background: var(--bg-hover) !important;
   color: var(--text-primary) !important;
 }
 
-/* ---- LIGHT THEME TEXT FIXES - ALL IN ONE PLACE ---- */
-body.theme-light .dm-name,
-body.theme-light .dm-preview,
-body.theme-light .dm-time,
-body.theme-light .fr-name,
-body.theme-light .fr-sub,
-body.theme-light .wv-title,
-body.theme-light .wv-sub,
-body.theme-light .conversation-start .start-header h1,
-body.theme-light .conversation-start .start-header h4,
-body.theme-light .ch-room-name,
-body.theme-light #chat-status-text,
-body.theme-light .msg-author,
-body.theme-light .msg-text,
-body.theme-light .toggle-label,
-body.theme-light .nav-item,
-body.theme-light .sidebar .nav-item span,
-body.theme-light .sidebar .dm-name,
-body.theme-light .sidebar .dm-preview,
-body.theme-light .dm-content .dm-name,
-body.theme-light .dm-content .dm-preview,
-body.theme-light .settings-sidebar .nav-item-settings,
-body.theme-light .settings-sidebar .nav-section {
-  color: var(--text-primary) !important;
-}
-
-/* Welcome text specific */
-body.theme-light .wv-title {
-  color: #1a1a1a !important;
-}
-
-body.theme-light .wv-sub {
-  color: #4a4a4a !important;
-}
-
-/* Empty states */
-body.theme-light .empty-state,
-body.theme-light .conversation-start p,
-body.theme-light .friends-empty {
-  color: var(--text-secondary) !important;
-}
-
-/* Mentions - always accent color */
-body.theme-light .mention,
-body.theme-light .at-user,
-body.theme-light [class*="mention"] {
-  color: var(--accent) !important;
-}
-
-/* Active sidebar items in light theme */
-body.theme-light .settings-sidebar .nav-item-settings.active {
-  color: var(--accent) !important;
-}
-
-body.theme-light .settings-sidebar .nav-item-settings.active span {
-  color: var(--accent) !important;
-}
-
-/* New Message button text - always white */
-body.theme-light .new-message-btn,
-body.theme-light .wv-new-btn {
-  color: #ffffff !important;
-}
-
-/* Conversation preview text */
-body.theme-light .dm-preview {
-  color: var(--text-secondary) !important;
-}
-
-body.theme-light .dm-name {
-  color: var(--text-primary) !important;
-}
-/* ---- LIGHT THEME - FIX WELCOME CARD AND BACKGROUNDS ---- */
+/* ---- LIGHT THEME SPECIFIC FIXES ---- */
 body.theme-light .welcome-card {
   background: #ffffff !important;
   border-color: #e0e0e0 !important;
@@ -419,12 +317,6 @@ body.theme-light .welcome-card .wv-sub {
   color: #4a4a4a !important;
 }
 
-/* Fix the welcome card border and shadow */
-body.theme-light .welcome-card {
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08) !important;
-}
-
-/* Fix "Welcome to nyxie" text visibility */
 body.theme-light .wv-title {
   color: #1a1a1a !important;
 }
@@ -433,7 +325,6 @@ body.theme-light .wv-sub {
   color: #4a4a4a !important;
 }
 
-/* Fix conversation start view background */
 body.theme-light .conversation-start {
   background: var(--bg-modal) !important;
 }
@@ -446,29 +337,19 @@ body.theme-light .conversation-start .start-header h4 {
   color: #4a4a4a !important;
 }
 
-/* Fix @sato mention in light theme */
 body.theme-light .mention,
-body.theme-light .at-user,
-body.theme-light .wv-sub .mention {
+body.theme-light .at-user {
   color: var(--accent) !important;
 }
 
-/* Fix the "No conversations yet" text */
-body.theme-light .empty-state,
-body.theme-light .conversation-start p {
-  color: #4a4a4a !important;
+body.theme-light .dm-name {
+  color: var(--text-primary) !important;
 }
 
-/* Fix the "Select a conversation" text */
-body.theme-light .conversation-start .start-header h4 {
-  color: #6a6a6a !important;
+body.theme-light .dm-preview {
+  color: var(--text-secondary) !important;
 }
 
-/* Fix the "Welcome to nyxie" heading */
-body.theme-light .conversation-start .start-header h1 {
-  color: #1a1a1a !important;
-}
-/* ---- LIGHT THEME - FIX USER PANEL ---- */
 body.theme-light #user-panel {
   background: #f5f5f5 !important;
   border-top-color: #e0e0e0 !important;
@@ -487,20 +368,10 @@ body.theme-light .up-btn {
 }
 
 body.theme-light .up-btn:hover {
-  background: rgba(0, 0, 0, 0.06) !important;
+  background: rgba(0, 0, 0, 0.05) !important;
   color: #1a1a1a !important;
 }
 
-/* Fix the sidebar bottom area */
-body.theme-light .settings-sidebar-bottom {
-  border-top-color: #e0e0e0 !important;
-}
-
-body.theme-light .settings-sidebar-bottom .version-text {
-  color: #6a6a6a !important;
-}
-
-/* Fix any other dark elements */
 body.theme-light #sidebar {
   background: #f5f5f5 !important;
 }
@@ -518,11 +389,47 @@ body.theme-light .settings-sidebar .nav-item-settings {
 }
 
 body.theme-light .settings-sidebar .nav-item-settings:hover {
-  background: rgba(0, 0, 0, 0.05) !important;
+  background: rgba(0, 0, 0, 0.04) !important;
   color: #1a1a1a !important;
 }
 
 body.theme-light .settings-sidebar .nav-item-settings.active {
-  background: rgba(253, 102, 113, 0.1) !important;
-  color: var(--accent) !important;
+  background: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
+  border-left: 3px solid var(--accent) !important;
+}
+
+body.theme-light .settings-sidebar-bottom {
+  border-top-color: #e0e0e0 !important;
+}
+
+body.theme-light .settings-sidebar-bottom .version-text {
+  color: #6a6a6a !important;
+}
+
+body.theme-light .empty-state,
+body.theme-light .friends-empty {
+  color: #4a4a4a !important;
+}
+
+/* ---- DARK THEME SPECIFIC ---- */
+body.theme-dark .welcome-card {
+  background: #1a1a1a !important;
+  border-color: #333333 !important;
+}
+
+body.theme-dark .welcome-card .wv-title {
+  color: #f0f0f0 !important;
+}
+
+body.theme-dark .welcome-card .wv-sub {
+  color: #b0b0b0 !important;
+}
+
+body.theme-dark .dm-preview {
+  color: var(--text-secondary) !important;
+}
+
+body.theme-dark .dm-name {
+  color: var(--text-primary) !important;
 }

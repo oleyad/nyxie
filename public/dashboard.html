@@ -36,8 +36,8 @@
       --online: #3ba55c;
       --offline: #6a6a72;
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-      --emoji-picker-width: 320px;
-      --emoji-item-size: 44px;
+      --emoji-picker-width: 360px;
+      --emoji-item-size: 36px;
     }
     html, body {
       height: 100%;
@@ -500,7 +500,7 @@
       font-family: 'Monaco', 'Courier New', monospace;
       font-size: 0.42rem;
       line-height: 1.2;
-      background: linear-gradient(135deg, #8bbaff 0%, #c084fc 70%);
+      background: linear-gradient(135deg, #ff0000 0%, #ff0000 70%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -1304,7 +1304,7 @@
       padding: 12px;
       display: none;
       width: var(--emoji-picker-width);
-      max-height: 380px;
+      max-height: 420px;
       box-shadow: var(--shadow);
       z-index: 20;
       flex-direction: column;
@@ -1368,7 +1368,7 @@
       overflow-y: auto;
       padding: 8px 0 0;
       min-height: 40px;
-      max-height: 280px;
+      max-height: 340px;
     }
     .emoji-picker-results .ep-empty {
       color: var(--text-muted);
@@ -1386,7 +1386,7 @@
     }
     .ep-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(8, 1fr);
       gap: 2px;
     }
     .ep-item {
@@ -1395,8 +1395,8 @@
       justify-content: center;
       width: 100%;
       aspect-ratio: 1 / 1;
-      font-size: 1.4rem;
-      border-radius: 6px;
+      font-size: 1.2rem;
+      border-radius: 4px;
       cursor: pointer;
       transition: background 0.1s, transform 0.1s;
       background: transparent;
@@ -1408,7 +1408,7 @@
     }
     .ep-item:hover {
       background: var(--bg-hover);
-      transform: scale(1.08);
+      transform: scale(1.05);
     }
     .ep-item .ep-tooltip {
       position: absolute;
@@ -1898,6 +1898,13 @@
       overflow: hidden;
       padding: 20px 24px 24px;
     }
+    #user-profile-popout .up-banner {
+      height: 80px;
+      border-radius: 12px 12px 0 0;
+      margin: -20px -24px 12px -24px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    }
     #user-profile-popout .up-header {
       display: flex;
       align-items: center;
@@ -2203,7 +2210,7 @@
       .welcome-card { padding: 30px 20px; }
       .emoji-picker { width: 260px; right: 0; max-height: 320px; }
       .ep-grid { grid-template-columns: repeat(6, 1fr); }
-      .ep-item { font-size: 1.2rem; min-height: 36px; }
+      .ep-item { font-size: 1.1rem; min-height: 32px; }
     }
     /* ---- ACCENT COLOR  ---- */
     .new-message-btn {
@@ -2733,6 +2740,7 @@ __    __  __      __  __    __  ______  ________
 
   <!-- User Profile Popout (others) -->
   <div id="user-profile-popout">
+    <div class="up-banner" id="up-banner"></div>
     <div class="up-header">
       <div class="up-avatar-large" id="up-avatar-large">?</div>
       <div>
@@ -2877,7 +2885,7 @@ __    __  __      __  __    __  ______  ________
         }
       }
 
-      function search(query, limit = 8) {
+      function search(query, limit = 10) {
         const q = query.toLowerCase().trim();
         if (!q) return [];
 
@@ -2942,7 +2950,7 @@ __    __  __      __  __    __  ______  ________
     })();
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    //  EMOJI PICKER UI (unchanged – keep emoji panel intact)
+    //  EMOJI PICKER UI (updated to show all emojis)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     let emojiPickerOpen = false;
@@ -2972,72 +2980,51 @@ __    __  __      __  __    __  ______  ________
       let results = [];
 
       if (q) {
-        results = EmojiDB.search(q, 8);
-      } else {
-        const recent = EmojiDB.getRecent();
-        const all = EmojiDB.getEmojis();
-        const seen = new Set();
-        const mixed = [];
-        for (const r of recent) {
-          const found = all.find(e => e.emoji === r);
-          if (found && !seen.has(found.emoji)) {
-            seen.add(found.emoji);
-            mixed.push(found);
-          }
+        results = EmojiDB.search(q, 10);
+        if (!results.length) {
+          container.innerHTML = `<div class="ep-empty">No emojis found</div>`;
+          return;
         }
-        for (const e of all) {
-          if (!seen.has(e.emoji) && mixed.length < 8) {
-            seen.add(e.emoji);
-            mixed.push(e);
-          }
-          if (mixed.length >= 8) break;
-        }
-        results = mixed;
-      }
-
-      if (!results.length) {
-        container.innerHTML = `<div class="ep-empty">${q ? 'No emojis found' : 'No emojis loaded'}</div>`;
-        return;
-      }
-
-      let html = '';
-      if (!q && EmojiDB.getRecent().length) {
-        html += `<div class="ep-section-label">Recent</div>`;
-        html += `<div class="ep-grid">`;
-        const recent = EmojiDB.getRecent();
-        const all = EmojiDB.getEmojis();
-        const shown = new Set();
-        let count = 0;
-        for (const r of recent) {
-          if (count >= 8) break;
-          const found = all.find(e => e.emoji === r);
-          if (found && !shown.has(found.emoji)) {
-            shown.add(found.emoji);
-            html += renderEmojiItem(found);
-            count++;
-          }
+        let html = `<div class="ep-grid">`;
+        for (const item of results) {
+          html += renderEmojiItem(item);
         }
         html += `</div>`;
-        if (count < 8) {
-          for (const e of all) {
-            if (count >= 8) break;
-            if (!shown.has(e.emoji)) {
-              shown.add(e.emoji);
-              html += renderEmojiItem(e);
-              count++;
-            }
-          }
-        }
         container.innerHTML = html;
         return;
       }
 
-      html = `<div class="ep-grid">`;
-      for (const item of results) {
-        html += renderEmojiItem(item);
+      // No query: show all emojis (with recent section on top)
+      const allEmojis = EmojiDB.getEmojis();
+      const recent = EmojiDB.getRecent();
+      const recentEmojis = recent
+        .map(r => allEmojis.find(e => e.emoji === r))
+        .filter(Boolean);
+
+      let html = '';
+      if (recentEmojis.length) {
+        html += `<div class="ep-section-label">Recent</div>`;
+        html += `<div class="ep-grid">`;
+        for (const item of recentEmojis) {
+          html += renderEmojiItem(item);
+        }
+        html += `</div>`;
       }
-      html += `</div>`;
-      container.innerHTML = html;
+
+      // All emojis (excluding those already shown in recent)
+      const shown = new Set(recentEmojis.map(e => e.emoji));
+      const remaining = allEmojis.filter(e => !shown.has(e.emoji));
+
+      if (remaining.length) {
+        html += `<div class="ep-section-label">All Emojis</div>`;
+        html += `<div class="ep-grid">`;
+        for (const item of remaining) {
+          html += renderEmojiItem(item);
+        }
+        html += `</div>`;
+      }
+
+      container.innerHTML = html || `<div class="ep-empty">No emojis loaded</div>`;
     }
 
     function renderEmojiItem(item) {
@@ -3150,7 +3137,7 @@ __    __  __      __  __    __  ______  ________
 
       scQuery = query;
       scSelectedIndex = -1;
-      const results = EmojiDB.search(query, 8);
+      const results = EmojiDB.search(query, 10);
       scResults = results;
 
       if (!results.length) {
@@ -3406,6 +3393,10 @@ __    __  __      __  __    __  ______  ________
       const name = room.display_name || room.name || 'Unknown';
       const letter = name[0].toUpperCase();
       const chAvatar = document.getElementById('ch-avatar');
+      // Set initial avatar (will be replaced if we have an avatar image)
+      chAvatar.textContent = letter;
+      chAvatar.style.background = hashColor(name);
+      chAvatar.innerHTML = ''; // reset
       chAvatar.textContent = letter;
       chAvatar.style.background = hashColor(name);
       document.getElementById('chat-room-name-text').textContent = '@' + name;
@@ -3418,6 +3409,16 @@ __    __  __      __  __    __  ______  ________
             document.getElementById('ch-status-dot').className = `ch-status-dot ${pipClass(status)}`;
             const statusText = status === 'offline' ? (udata.user.last_seen ? `last seen ${fmtLastSeen(udata.user.last_seen)}` : 'offline') : 'online';
             document.getElementById('chat-status-text').textContent = statusText;
+
+            // Set avatar if exists
+            const chAvatarEl = document.getElementById('ch-avatar');
+            if (udata.user.avatar) {
+              chAvatarEl.innerHTML = `<img src="${udata.user.avatar}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;" />`;
+            } else {
+              // fallback to initial
+              chAvatarEl.textContent = name[0].toUpperCase();
+              chAvatarEl.style.background = hashColor(name);
+            }
           }
         });
       }
@@ -3438,8 +3439,8 @@ __    __  __      __  __    __  ______  ________
           container.innerHTML = `
             <div class="conversation-start">
               <div class="start-header">
-                <h1>@${escapeHtml(otherName)}</h1>
-                <h4>This is the start of your conversation.</h4>
+                <h3>This is the start of your legendery conversation with</h4>
+                <h1>@${escapeHtml(otherName)}.</h1>
               </div>
             </div>
           `;
@@ -3551,6 +3552,7 @@ __    __  __      __  __    __  ______  ________
                 display_name: other.display_name || other.username,
                 _otherId: other.id,
                 _status: 'offline',
+                _avatar: other.avatar || null,
                 last_message: null,
                 last_message_at: null
               };
@@ -3559,6 +3561,7 @@ __    __  __      __  __    __  ______  ________
               wsJoin(msg.room_id);
               api('GET', `/users/${other.id}`).then(u => {
                 newDm._status = u?.user?.status || 'offline';
+                newDm._avatar = u?.user?.avatar || null;
                 renderDMList();
               });
             }
@@ -3584,6 +3587,7 @@ __    __  __      __  __    __  ______  ________
         if (dm._otherId) {
           const udata = await api('GET', `/users/${dm._otherId}`);
           dm._status = udata?.user?.status || 'offline';
+          dm._avatar = udata?.user?.avatar || null;
         }
       }));
       dms = fresh;
@@ -3606,13 +3610,19 @@ __    __  __      __  __    __  ______  ________
         const time = dm.last_message_at ? fmtTime(dm.last_message_at) : '';
         const isActive = currentRoom?.id === dm.id;
 
+        let avatarHtml = letter;
+        if (dm._avatar) {
+          avatarHtml = `<img src="${dm._avatar}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;" />`;
+        }
+        const dmAvatar = `<div class="dm-avatar" style="background:${hashColor(name)}">${avatarHtml}</div>`;
+
         const chk = `<div class="dm-checkbox" onclick="event.stopPropagation();toggleDMSelect('${dm.id}',this.closest('.dm-item'))"></div>`;
         return `<div class="dm-item${isActive ? ' active' : ''}" data-room-id="${dm.id}"
           onclick="selectModeActive?toggleDMSelect('${dm.id}',this):openRoom('${dm.id}')"
           oncontextmenu="showCtxMenu(event,'${dm.id}')">
           ${chk}
           <div class="dm-avatar-wrap">
-            <div class="dm-avatar" style="background:${hashColor(name)}">${letter}</div>
+            ${dmAvatar}
             <div class="status-pip ${pipClass(status)}" data-uid-pip="${dm._otherId||''}"></div>
           </div>
           <div class="dm-content">
@@ -4034,17 +4044,8 @@ __    __  __      __  __    __  ______  ________
       if (q) {
         results = EmojiDB.search(q, 24);
       } else {
-        const recent = EmojiDB.getRecent();
-        const all = EmojiDB.getEmojis();
-        const seen = new Set();
-        for (const r of recent) {
-          const found = all.find(e => e.emoji === r);
-          if (found && !seen.has(found.emoji)) { seen.add(found.emoji); results.push(found); }
-        }
-        for (const e of all) {
-          if (results.length >= 24) break;
-          if (!seen.has(e.emoji)) { seen.add(e.emoji); results.push(e); }
-        }
+        // Show all emojis for reaction picker (no recent section, just all)
+        results = EmojiDB.getEmojis().slice(0, 48); // limit to 48 for performance
       }
       if (!results.length) {
         container.innerHTML = `<div class="ep-empty">${q ? 'No emojis found' : 'No emojis loaded'}</div>`;
@@ -4330,6 +4331,16 @@ __    __  __      __  __    __  ______  ________
         document.getElementById('up-name-display').textContent = user.display_name || user.username;
         document.getElementById('up-username-display').textContent = '@' + user.username;
         document.getElementById('up-bio-display').textContent = user.bio || '';
+
+        // Banner
+        const bannerEl = document.getElementById('up-banner');
+        if (user.banner) {
+          bannerEl.style.background = `url("${user.banner}?t=${Date.now()}") center/cover no-repeat`;
+        } else if (user.banner_color) {
+          bannerEl.style.background = user.banner_color;
+        } else {
+          bannerEl.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-hover))';
+        }
 
         if (user.avatar) {
           avatarEl.innerHTML = `<img src="${user.avatar}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;" />`;
@@ -4672,6 +4683,7 @@ __    __  __      __  __    __  ______  ________
           display_name: targetName,
           _otherId: targetUserId,
           _status: 'offline',
+          _avatar: null,
           last_message: null,
           last_message_at: null
         };
@@ -5039,6 +5051,7 @@ __    __  __      __  __    __  ______  ________
             if (dm._otherId) {
               const udata = await api('GET', `/users/${dm._otherId}`);
               dm._status = udata?.user?.status || 'offline';
+              dm._avatar = udata?.user?.avatar || null;
             }
           }));
           dms = [...newOnes, ...dms];

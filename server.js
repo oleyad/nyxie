@@ -17,6 +17,12 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve uploaded avatars and banners. These live under /data, not /public,
+// so without this line requests to /avatars/* and /banners/* 404 even
+// though the files were written successfully on upload.
+app.use('/avatars', express.static(path.join(__dirname, 'data', 'avatars')));
+app.use('/banners', express.static(path.join(__dirname, 'data', 'banners')));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/rooms', roomRoutes);

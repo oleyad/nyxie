@@ -56,8 +56,8 @@ router.post('/register', async (req, res) => {
     const now = Date.now();
 
     run(db,
-      `INSERT INTO users (id, username, email, password_hash, display_name, avatar, bio, status, created_at, last_seen)
-       VALUES (?, ?, ?, ?, ?, NULL, NULL, 'online', ?, ?)`,
+      `INSERT INTO users (id, username, email, password_hash, display_name, avatar, banner, banner_color, bio, status, created_at, last_seen)
+       VALUES (?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, 'online', ?, ?)`,
       [userId, trimmedUsername, trimmedEmail, passwordHash, displayName, now, now]
     );
 
@@ -75,7 +75,7 @@ router.post('/register', async (req, res) => {
     const token = signToken(userId);
     res.status(201).json({
       token,
-      user: { id: userId, username: trimmedUsername, email: trimmedEmail, display_name: displayName, avatar: null, bio: null, status: 'online' }
+      user: { id: userId, username: trimmedUsername, email: trimmedEmail, display_name: displayName, avatar: null, banner: null, banner_color: null, bio: null, status: 'online' }
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -127,6 +127,8 @@ router.post('/login', async (req, res) => {
         email: user.email,
         display_name: user.display_name,
         avatar: user.avatar || null,
+        banner: user.banner || null,
+        banner_color: user.banner_color || null,
         bio: user.bio || null,
         status: user.status || 'online'
       }
@@ -146,7 +148,7 @@ router.get('/me', async (req, res) => {
     const token = authHeader.slice(7);
     const payload = jwt.verify(token, JWT_SECRET);
     const db = await getUserDb();
-    const user = get(db, 'SELECT id, username, email, display_name, avatar, bio, status, created_at, last_seen FROM users WHERE id = ?', [payload.sub]);
+    const user = get(db, 'SELECT id, username, email, display_name, avatar, banner, banner_color, bio, status, created_at, last_seen FROM users WHERE id = ?', [payload.sub]);
     if (!user) return res.status(401).json({ error: 'User not found' });
     res.json({ user });
   } catch (err) {

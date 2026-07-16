@@ -38,6 +38,8 @@ async function getUserDb() {
       password_hash TEXT NOT NULL,
       display_name TEXT NOT NULL,
       avatar TEXT,
+      banner TEXT,
+      banner_color TEXT,
       bio TEXT,
       status TEXT DEFAULT 'online',
       status_updated_at INTEGER,
@@ -55,6 +57,18 @@ async function getUserDb() {
   }
   try {
     db.run("ALTER TABLE users ADD COLUMN disabled INTEGER DEFAULT 0");
+  } catch (e) {
+    // column already exists – ignore
+  }
+  try {
+    // Path to an uploaded banner image/gif, e.g. '/banners/<file>'. Null if using a flat color instead.
+    db.run("ALTER TABLE users ADD COLUMN banner TEXT");
+  } catch (e) {
+    // column already exists – ignore
+  }
+  try {
+    // CSS color (hex/rgb) used as the banner when no image/gif is uploaded.
+    db.run("ALTER TABLE users ADD COLUMN banner_color TEXT");
   } catch (e) {
     // column already exists – ignore
   }

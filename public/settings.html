@@ -116,7 +116,6 @@
       color: var(--text-primary);
     }
     
-    /* Only active sidebar item gets accent color */
     .settings-sidebar .nav-item-settings.active {
       background: var(--bg-active) !important;
       color: var(--accent) !important;
@@ -231,66 +230,186 @@
       height: 18px;
     }
 
-    .profile-card {
+    /* ---------- Profile Edit ---------- */
+    .profile-edit-container {
+      max-width: 720px;
+    }
+
+    .profile-edit-section {
+      margin-bottom: 28px;
+    }
+    .profile-edit-section label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .avatar-edit-row {
       display: flex;
       align-items: center;
-      gap: 18px;
-      background: var(--bg-modal-card);
-      border-radius: var(--radius);
-      padding: 18px 24px;
-      margin-bottom: 28px;
-      border: 1px solid var(--border-color);
-      transition: background 0.3s ease, border-color 0.3s ease;
+      gap: 20px;
     }
-    .profile-card .pc-avatar {
-      width: 56px;
-      height: 56px;
+    .avatar-preview-large {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 2rem;
       font-weight: 700;
       color: #fff;
-      flex-shrink: 0;
       overflow: hidden;
+      flex-shrink: 0;
     }
-    .profile-card .pc-avatar img {
+    .avatar-preview-large img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    .profile-card .pc-info {
-      flex: 1;
+
+    .banner-edit-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .profile-card .pc-info .pc-name {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--text-primary);
-      transition: color 0.3s ease;
+    .banner-preview-large {
+      width: 100%;
+      height: 120px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      background-size: cover;
+      background-position: center;
+      border: 1px solid var(--border-color);
     }
-    .profile-card .pc-info .pc-id {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    .banner-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
     }
-    .profile-card .pc-edit-btn {
+    .banner-color-swatches {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .banner-swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+      flex-shrink: 0;
+    }
+    .banner-swatch:hover {
+      transform: scale(1.12);
+    }
+    .banner-swatch.active {
+      border-color: var(--text-primary);
+    }
+    .banner-color-custom {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--border-medium);
       background: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .banner-color-custom::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    .banner-color-custom::-webkit-color-swatch {
+      border: none;
+      border-radius: 50%;
+    }
+
+    .edit-profile-btn {
+      background: var(--bg-input);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 6px 16px;
       color: var(--text-secondary);
+      padding: 6px 14px;
       font-size: 0.8rem;
       font-weight: 500;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.3s ease;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
     }
-    .profile-card .pc-edit-btn:hover {
+    .edit-profile-btn:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
     }
+    .edit-profile-btn.danger:hover {
+      background: rgba(237, 66, 69, 0.12);
+      color: var(--danger);
+    }
 
+    .profile-edit-section input[type="text"],
+    .profile-edit-section textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .profile-edit-section input[type="text"]:focus,
+    .profile-edit-section textarea:focus {
+      border-color: var(--accent);
+    }
+    .profile-edit-section textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .character-counter {
+      text-align: right;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .username-hint {
+      background: var(--bg-modal-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    .username-hint a {
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .username-hint a:hover {
+      text-decoration: underline;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* ---------- Account fields (unchanged) ---------- */
     .account-field {
       display: flex;
       align-items: center;
@@ -617,37 +736,6 @@
       background: #d93036 !important;
     }
 
-    #edit-profile-modal .modal {
-      max-width: 480px;
-    }
-    #edit-profile-modal .avatar-preview {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 8px 0;
-    }
-    #edit-profile-modal .avatar-preview img {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #2a2a2a;
-    }
-    .edit-profile-btn {
-      background: var(--accent);
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      padding: 6px 14px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: background 0.15s;
-    }
-    .edit-profile-btn:hover {
-      background: var(--accent-hover);
-    }
-
     #toast {
       position: fixed;
       bottom: 28px;
@@ -668,7 +756,7 @@
       white-space: nowrap;
     }
 
-    /* Appearance Styles - Settings only */
+    /* Appearance Styles (unchanged) */
     .theme-preview-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -705,7 +793,6 @@
       transition: background 0.3s ease;
     }
     
-    /* All previews visible, dim non-active ones */
     .theme-preview-content {
       display: flex !important;
       gap: 6px;
@@ -819,7 +906,6 @@
       border-radius: 3px;
     }
 
-    /* ESC Preview */
     .esc-preview {
       background: #191919;
     }
@@ -842,7 +928,6 @@
       background: #2c2c2c;
     }
 
-    /* Light Preview */
     .light-preview {
       background: #ffffff;
     }
@@ -866,7 +951,6 @@
       border: 1px solid #e0e0e0;
     }
 
-    /* Dark Preview */
     .dark-preview {
       background: #1e1e1e;
     }
@@ -931,7 +1015,6 @@
       margin-left: auto;
     }
 
-    /* FIX: Accent Color Picker - Each swatch keeps its own color */
     .accent-color-picker {
       display: flex;
       gap: 10px;
@@ -947,7 +1030,6 @@
       transition: all 0.15s ease;
       padding: 0;
       flex-shrink: 0;
-      /* IMPORTANT: Don't set background here - it comes from inline style */
     }
     .accent-swatch:hover {
       transform: scale(1.1);
@@ -956,7 +1038,6 @@
       border-color: var(--text-primary);
       box-shadow: 0 0 0 2px var(--bg-primary);
     }
-    /* Custom color swatch - uses inline style too */
     .accent-swatch.custom-color {
       border-color: var(--border-medium);
       display: flex;
@@ -970,7 +1051,6 @@
       background: var(--bg-hover);
     }
 
-    /* Custom color picker with save button */
     .custom-color-row {
       display: flex;
       gap: 8px;
@@ -1123,7 +1203,10 @@
       .account-mgmt-grid {
         grid-template-columns: 1fr;
       }
-      .profile-card {
+      .avatar-edit-row {
+        flex-wrap: wrap;
+      }
+      .banner-controls {
         flex-wrap: wrap;
       }
       .theme-preview-grid {
@@ -1159,6 +1242,9 @@
       }
       .back-btn span {
         display: none;
+      }
+      .profile-edit-container {
+        max-width: 100%;
       }
     }
 
@@ -1219,17 +1305,9 @@
   <div class="settings-content">
     <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg><span>Back to Dashboard</span></button>
 
-    <!-- My Account Tab -->
+    <!-- My Account Tab (unchanged) -->
     <div class="settings-tab" id="tab-my-account">
       <div class="page-title">My Account</div>
-      <div class="profile-card">
-        <div class="pc-avatar" id="settings-avatar">U</div>
-        <div class="pc-info">
-          <div class="pc-name" id="settings-display-name">User</div>
-          <div class="pc-id" id="settings-user-id">User ID: 0000</div>
-        </div>
-        <button class="pc-edit-btn" onclick="openEditProfileModal()">Edit Profile</button>
-      </div>
       <div class="account-field">
         <div class="af-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <span class="af-label">Username</span>
@@ -1285,12 +1363,81 @@
       <div class="settings-footer-notice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Looking to customize your public profile? Head over to your profile settings.</span></div>
     </div>
 
-    <!-- Other tabs -->
-    <div class="settings-tab" id="tab-profile" style="display:none;"><div class="page-title">Profile</div><p style="color:var(--text-muted);">Profile settings coming soon.</p></div>
+    <!-- Profile Tab (redesigned) -->
+    <div class="settings-tab" id="tab-profile" style="display:none;">
+      <div class="page-title">Profile</div>
+
+      <div class="profile-edit-container">
+        <!-- Avatar -->
+        <div class="profile-edit-section">
+          <label>Avatar</label>
+          <div class="avatar-edit-row">
+            <div class="avatar-preview-large" id="profile-avatar-preview">
+              <span id="profile-avatar-letter">U</span>
+            </div>
+            <div>
+              <button class="edit-profile-btn" onclick="document.getElementById('profile-avatar-input').click()">Change Avatar</button>
+              <button class="edit-profile-btn danger" onclick="removeProfileAvatar()" style="margin-left:8px;">Remove</button>
+              <input type="file" id="profile-avatar-input" accept="image/*" style="display:none" onchange="uploadProfileAvatar(this.files[0])" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner -->
+        <div class="profile-edit-section">
+          <label>Banner</label>
+          <div class="banner-edit-row">
+            <div class="banner-preview-large" id="profile-banner-preview"></div>
+            <div class="banner-controls">
+              <div class="banner-color-swatches">
+                <div class="banner-swatch active" style="background:#fd6671" data-color="#fd6671" onclick="setProfileBannerColor('#fd6671')"></div>
+                <div class="banner-swatch" style="background:#5865f2" data-color="#5865f2" onclick="setProfileBannerColor('#5865f2')"></div>
+                <div class="banner-swatch" style="background:#1D9E75" data-color="#1D9E75" onclick="setProfileBannerColor('#1D9E75')"></div>
+                <div class="banner-swatch" style="background:#f5a623" data-color="#f5a623" onclick="setProfileBannerColor('#f5a623')"></div>
+                <div class="banner-swatch" style="background:#9b59b6" data-color="#9b59b6" onclick="setProfileBannerColor('#9b59b6')"></div>
+                <input type="color" class="banner-color-custom" id="profile-banner-color-custom" value="#fd6671" oninput="setProfileBannerColor(this.value)" title="Custom color" />
+              </div>
+              <button class="edit-profile-btn" onclick="document.getElementById('profile-banner-input').click()">Upload Image/GIF</button>
+              <input type="file" id="profile-banner-input" accept="image/*" style="display:none" onchange="uploadProfileBanner(this.files[0])" />
+              <button class="edit-profile-btn danger" onclick="removeProfileBanner()">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Display Name -->
+        <div class="profile-edit-section">
+          <label>Display Name</label>
+          <input type="text" id="profile-display-name" maxlength="32" placeholder="Display name" oninput="updateDisplayNameCounter()" />
+          <div class="character-counter"><span id="display-name-counter">0</span>/32</div>
+        </div>
+
+        <!-- Username hint -->
+        <div class="profile-edit-section">
+          <div class="username-hint">
+            <span>Want to change username? <a href="#" onclick="switchTab('my-account')">Go to account settings</a></span>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="profile-edit-section">
+          <label>Profile Bio</label>
+          <textarea id="profile-bio" rows="4" maxlength="500" placeholder="Something cool about you…" oninput="updateBioCounter()"></textarea>
+          <div class="character-counter"><span id="bio-counter">0</span>/500</div>
+        </div>
+
+        <!-- Actions -->
+        <div class="profile-actions">
+          <button class="btn-cancel" onclick="resetProfileForm()">Reset</button>
+          <button class="btn-primary" onclick="saveProfileChanges()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other tabs (unchanged) -->
     <div class="settings-tab" id="tab-sessions" style="display:none;"><div class="page-title">Sessions</div><p style="color:var(--text-muted);">Session management coming soon.</p></div>
     <div class="settings-tab" id="tab-voice" style="display:none;"><div class="page-title">Voice Settings</div><p style="color:var(--text-muted);">Voice settings coming soon.</p></div>
 
-    <!-- Appearance Tab -->
+    <!-- Appearance Tab (unchanged) -->
     <div class="settings-tab" id="tab-appearance" style="display:none;">
       <div class="page-title">Appearance</div>
 
@@ -1424,7 +1571,6 @@
           </button>
         </div>
         
-        <!-- Custom color picker with Save button -->
         <div class="custom-color-row">
           <input type="color" id="custom-accent-color" value="#fd6671" />
           <input type="text" id="custom-accent-hex" placeholder="Enter hex color (e.g., #ff0000)" />
@@ -1525,7 +1671,7 @@
   </div>
 </div>
 
-<!-- Modals -->
+<!-- Modals (unchanged) -->
 <!-- Change Username -->
 <div class="overlay" id="change-username-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
@@ -1602,40 +1748,6 @@
   </div>
 </div>
 
-<!-- Edit Profile Modal -->
-<div class="overlay" id="edit-profile-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal">
-    <h2>Edit Profile</h2>
-    <p>Update your information.</p>
-    <form id="editProfileForm" onsubmit="return false;">
-      <label>Username</label>
-      <input type="text" id="edit-username" placeholder="Username" />
-      <label>Display Name</label>
-      <input type="text" id="edit-displayname" placeholder="Display name" />
-      <label>Bio</label>
-      <textarea id="edit-bio" placeholder="Tell something about yourself…" rows="3"></textarea>
-      <div class="avatar-preview">
-        <img id="edit-avatar-preview" src="" alt="Avatar" />
-        <button type="button" class="edit-profile-btn" onclick="document.getElementById('edit-avatar-input').click()">Change Avatar</button>
-        <input type="file" id="edit-avatar-input" accept="image/*" style="display:none" onchange="uploadAvatarFromEdit(this.files[0])" />
-      </div>
-      <div style="margin-top:16px;border-top:1px solid var(--border-color);padding-top:12px;">
-        <p style="font-size:.8rem;color:var(--text-secondary);margin-bottom:8px;">Change Password (optional)</p>
-        <label>Current Password</label>
-        <input type="password" id="edit-current-password" placeholder="Current password" autocomplete="off" />
-        <label>New Password</label>
-        <input type="password" id="edit-new-password" placeholder="New password (min 8 chars)" autocomplete="off" />
-        <label>Confirm New Password</label>
-        <input type="password" id="edit-confirm-password" placeholder="Confirm new password" autocomplete="off" />
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="btn-cancel" onclick="closeEditProfileModal()">Cancel</button>
-        <button type="submit" class="btn-primary" id="edit-profile-save-btn">Save Changes</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <div id="toast"></div>
 
 <script>
@@ -1699,26 +1811,245 @@
   }
 
   // ---- Load user data ----
+  function hashColor(name) {
+    const colors = ['#fd6671', '#eb459e', '#ed4245', '#3ba55c', '#faa61a', '#1abc9c', '#e67e22', '#9b59b6'];
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffffff;
+    return colors[Math.abs(h) % colors.length];
+  }
+
+  function applyBannerStyle(el, user) {
+    if (!el || !user) return;
+    if (user.banner) {
+      el.style.background = `url("${user.banner}?t=${Date.now()}") center/cover no-repeat`;
+    } else if (user.banner_color) {
+      el.style.background = user.banner_color;
+    } else {
+      el.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-hover))';
+    }
+  }
+
+  // ---- Profile form functions ----
+  function loadProfileForm() {
+    const name = currentUser.display_name || currentUser.username;
+    const avatarEl = document.getElementById('profile-avatar-preview');
+    const letterEl = document.getElementById('profile-avatar-letter');
+    if (currentUser.avatar) {
+      avatarEl.innerHTML = `<img src="${currentUser.avatar}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;" />`;
+      letterEl.style.display = 'none';
+    } else {
+      avatarEl.innerHTML = `<span id="profile-avatar-letter">${name[0].toUpperCase()}</span>`;
+      avatarEl.style.background = hashColor(name);
+      letterEl.style.display = 'block';
+    }
+
+    // Banner
+    applyBannerStyle(document.getElementById('profile-banner-preview'), currentUser);
+    // Update swatch active state based on current banner_color
+    document.querySelectorAll('.banner-swatch').forEach(s => {
+      s.classList.toggle('active', !!currentUser.banner_color && s.dataset.color.toLowerCase() === currentUser.banner_color.toLowerCase());
+    });
+    if (currentUser.banner_color) {
+      document.getElementById('profile-banner-color-custom').value = currentUser.banner_color;
+    }
+
+    // Display name
+    document.getElementById('profile-display-name').value = currentUser.display_name || '';
+    updateDisplayNameCounter();
+
+    // Bio
+    document.getElementById('profile-bio').value = currentUser.bio || '';
+    updateBioCounter();
+  }
+
+  function updateDisplayNameCounter() {
+    const val = document.getElementById('profile-display-name').value;
+    document.getElementById('display-name-counter').textContent = val.length;
+  }
+
+  function updateBioCounter() {
+    const val = document.getElementById('profile-bio').value;
+    document.getElementById('bio-counter').textContent = val.length;
+  }
+
+  let _pendingBannerColor = null; // staged color change
+
+  function setProfileBannerColor(color) {
+    _pendingBannerColor = color;
+    document.querySelectorAll('.banner-swatch').forEach(s => {
+      s.classList.toggle('active', s.dataset.color.toLowerCase() === color.toLowerCase());
+    });
+    document.getElementById('profile-banner-color-custom').value = color;
+    document.getElementById('profile-banner-preview').style.background = color;
+  }
+
+  async function uploadProfileAvatar(file) {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('avatar', file);
+    try {
+      const res = await fetch('/api/users/avatar', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + token },
+        body: formData
+      });
+      const data = await res.json();
+      if (data.ok) {
+        currentUser.avatar = data.avatar;
+        localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
+        loadProfileForm();
+        toast('Avatar updated');
+      } else {
+        toast(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      toast('Upload error');
+    }
+  }
+
+  async function removeProfileAvatar() {
+    // There's no explicit DELETE avatar endpoint; we can set avatar to null via PATCH?
+    // For now we can just let user upload a new one. We'll skip removal.
+    toast('Remove avatar not implemented, but you can upload a new one.');
+  }
+
+  async function uploadProfileBanner(file) {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('banner', file);
+    try {
+      const res = await fetch('/api/users/banner', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + token },
+        body: formData
+      });
+      const data = await res.json();
+      if (data.ok) {
+        currentUser.banner = data.banner;
+        currentUser.banner_color = null;
+        _pendingBannerColor = null;
+        localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
+        document.querySelectorAll('.banner-swatch').forEach(s => s.classList.remove('active'));
+        loadProfileForm();
+        toast('Banner updated');
+      } else {
+        toast(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      toast('Upload error');
+    }
+  }
+
+  async function removeProfileBanner() {
+    try {
+      const res = await fetch('/api/users/banner', {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + token }
+      });
+      const data = await res.json();
+      if (data.ok) {
+        currentUser.banner = null;
+        currentUser.banner_color = null;
+        _pendingBannerColor = null;
+        localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
+        document.querySelectorAll('.banner-swatch').forEach(s => s.classList.remove('active'));
+        loadProfileForm();
+        toast('Banner removed');
+      } else {
+        toast(data.error || 'Failed to remove banner');
+      }
+    } catch (err) {
+      toast('Error removing banner');
+    }
+  }
+
+  function resetProfileForm() {
+    loadProfileForm();
+    _pendingBannerColor = null;
+    toast('Form reset');
+  }
+
+  async function saveProfileChanges() {
+    const displayName = document.getElementById('profile-display-name').value.trim();
+    const bio = document.getElementById('profile-bio').value.trim();
+
+    // Validate
+    if (displayName.length > 32) {
+      toast('Display name too long (max 32)');
+      return;
+    }
+    if (bio.length > 500) {
+      toast('Bio too long (max 500)');
+      return;
+    }
+
+    const payload = {};
+    if (displayName !== currentUser.display_name) payload.display_name = displayName;
+    if (bio !== (currentUser.bio || '')) payload.bio = bio;
+    if (_pendingBannerColor !== null && _pendingBannerColor !== (currentUser.banner_color || '')) {
+      payload.banner_color = _pendingBannerColor;
+    }
+
+    if (Object.keys(payload).length === 0) {
+      toast('No changes to save');
+      return;
+    }
+
+    const saveBtn = document.querySelector('.profile-actions .btn-primary');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+
+    try {
+      const res = await api('PATCH', '/users/me', payload);
+      if (res?.error) { toast(res.error); return; }
+      if (res.user) {
+        currentUser.display_name = res.user.display_name;
+        currentUser.bio = res.user.bio;
+        currentUser.banner_color = res.user.banner_color;
+        currentUser.banner = res.user.banner; // may be null if color set
+        localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
+        _pendingBannerColor = null;
+        toast('Profile updated');
+        loadProfileForm();
+        // Also update sidebar & other UI via loadUserData? but we're in settings, we can reload the whole user data.
+        loadUserData();
+      }
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save';
+    }
+  }
+
+  // ---- Load user data (including settings header) ----
   async function loadUserData() {
     const data = await api('GET', '/auth/me');
     if (data?.user) {
       currentUser = data.user;
       localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
     }
-    const name = currentUser.display_name || currentUser.username;
-    const avatarEl = document.getElementById('settings-avatar');
-    avatarEl.textContent = name[0].toUpperCase();
-    if (currentUser.avatar) {
-      avatarEl.innerHTML = `<img src="${currentUser.avatar}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;" />`;
-    }
-    document.getElementById('settings-display-name').textContent = name;
-    document.getElementById('settings-user-id').textContent = `User ID: ${currentUser.id}`;
+    // Update My Account fields
     document.getElementById('settings-username').textContent = '@' + currentUser.username;
     emailVisible = false;
     document.getElementById('settings-email').textContent = '••••••••';
+    // Profile tab will be loaded when switched
+    if (document.getElementById('tab-profile').style.display !== 'none') {
+      loadProfileForm();
+    }
   }
 
-  // ---- Change Username ----
+  // ---- Other functions (unchanged) ----
+  function toggleEmailVisibility() {
+    emailVisible = !emailVisible;
+    const el = document.getElementById('settings-email');
+    if (emailVisible) {
+      el.textContent = currentUser.email || 'user@example.com';
+    } else {
+      el.textContent = '••••••••';
+    }
+  }
+
   function openChangeUsername() {
     document.getElementById('change-username-modal').style.display = 'flex';
     document.getElementById('new-username-input').value = '';
@@ -1751,24 +2082,10 @@
       toast('Username updated');
       document.getElementById('change-username-modal').style.display = 'none';
       document.getElementById('settings-username').textContent = '@' + currentUser.username;
-      if (document.getElementById('edit-profile-modal').style.display === 'flex') {
-        document.getElementById('edit-username').value = currentUser.username;
-      }
+      loadProfileForm();
     }
   }
 
-  // ---- Toggle Email ----
-  function toggleEmailVisibility() {
-    emailVisible = !emailVisible;
-    const el = document.getElementById('settings-email');
-    if (emailVisible) {
-      el.textContent = currentUser.email || 'user@example.com';
-    } else {
-      el.textContent = '••••••••';
-    }
-  }
-
-  // ---- Change Email ----
   function openChangeEmail() {
     document.getElementById('change-email-modal').style.display = 'flex';
     document.getElementById('new-email-input').value = '';
@@ -1797,7 +2114,6 @@
     }
   }
 
-  // ---- Change Password ----
   function openChangePassword() {
     document.getElementById('change-password-modal').style.display = 'flex';
     document.getElementById('change-current-password').value = '';
@@ -1822,7 +2138,6 @@
     document.getElementById('change-password-modal').style.display = 'none';
   }
 
-  // ---- Disable Account ----
   function openDisableAccount() {
     document.getElementById('disable-account-modal').style.display = 'flex';
     document.getElementById('disable-password').value = '';
@@ -1839,7 +2154,6 @@
     setTimeout(logout, 1500);
   }
 
-  // ---- Delete Account ----
   function openDeleteAccount() {
     document.getElementById('delete-account-modal').style.display = 'flex';
     document.getElementById('delete-password').value = '';
@@ -1856,112 +2170,10 @@
     setTimeout(logout, 1500);
   }
 
-  // ---- 2FA stubs ----
   function generateBackupCodes() { toast('Backup codes generation coming soon'); }
   function addAuthenticator() { toast('Authenticator setup coming soon'); }
 
-  // ---- Edit Profile Modal ----
-  function openEditProfileModal() {
-    document.getElementById('edit-profile-modal').style.display = 'flex';
-    document.getElementById('edit-username').value = currentUser.username || '';
-    document.getElementById('edit-displayname').value = currentUser.display_name || '';
-    document.getElementById('edit-bio').value = currentUser.bio || '';
-    const preview = document.getElementById('edit-avatar-preview');
-    if (currentUser.avatar) {
-      preview.src = currentUser.avatar + '?t=' + Date.now();
-      preview.style.display = 'block';
-    } else {
-      preview.style.display = 'none';
-    }
-    document.getElementById('edit-current-password').value = '';
-    document.getElementById('edit-new-password').value = '';
-    document.getElementById('edit-confirm-password').value = '';
-  }
-
-  function closeEditProfileModal() {
-    document.getElementById('edit-profile-modal').style.display = 'none';
-  }
-
-  document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const username = document.getElementById('edit-username').value.trim();
-    const display_name = document.getElementById('edit-displayname').value.trim();
-    const bio = document.getElementById('edit-bio').value.trim();
-    const current_password = document.getElementById('edit-current-password').value;
-    const new_password = document.getElementById('edit-new-password').value;
-    const confirm_password = document.getElementById('edit-confirm-password').value;
-
-    if (!username || username.length < 3 || username.length > 30 || !/^[a-zA-Z0-9_-]+$/.test(username)) {
-      toast('Invalid username'); return;
-    }
-    if (display_name && display_name.length > 64) { toast('Display name too long'); return; }
-    if (bio && bio.length > 500) { toast('Bio too long'); return; }
-    if (new_password && new_password !== confirm_password) { toast('Passwords do not match'); return; }
-    if (new_password && new_password.length < 8) { toast('New password must be at least 8 characters'); return; }
-    if (new_password && !current_password) { toast('Current password is required to change password'); return; }
-
-    const payload = {};
-    if (username !== currentUser.username) payload.username = username;
-    if (display_name !== currentUser.display_name) payload.display_name = display_name;
-    if (bio !== (currentUser.bio || '')) payload.bio = bio;
-    if (new_password) {
-      payload.current_password = current_password;
-      payload.new_password = new_password;
-    }
-
-    if (Object.keys(payload).length === 0) { toast('No changes made'); return; }
-
-    const saveBtn = document.getElementById('edit-profile-save-btn');
-    saveBtn.disabled = true;
-    saveBtn.textContent = 'Saving...';
-
-    try {
-      const res = await api('PATCH', '/users/me', payload);
-      if (res?.error) { toast(res.error); return; }
-      if (res.user) {
-        currentUser.username = res.user.username;
-        currentUser.display_name = res.user.display_name;
-        currentUser.bio = res.user.bio;
-        localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
-        toast('Profile updated');
-        closeEditProfileModal();
-        loadUserData();
-      }
-    } catch (err) {
-      toast(err.message);
-    } finally {
-      saveBtn.disabled = false;
-      saveBtn.textContent = 'Save Changes';
-    }
-  });
-
-  async function uploadAvatarFromEdit(file) {
-    if (!file) return;
-    const formData = new FormData();
-    formData.append('avatar', file);
-    try {
-      const res = await fetch('/api/users/avatar', {
-        method: 'POST',
-        headers: { Authorization: 'Bearer ' + token },
-        body: formData
-      });
-      const data = await res.json();
-      if (data.ok) {
-        currentUser.avatar = data.avatar;
-        localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
-        document.getElementById('edit-avatar-preview').src = data.avatar + '?t=' + Date.now();
-        document.getElementById('edit-avatar-preview').style.display = 'block';
-        toast('Avatar updated');
-        loadUserData();
-      } else {
-        toast(data.error || 'Upload failed');
-      }
-    } catch (err) {
-      toast('Upload error');
-    }
-  }
-
-  // ---- Appearance Settings ----
+  // ---- Appearance (unchanged) ----
   function updateThemePreviews(theme) {
     document.querySelectorAll('.theme-preview-card').forEach(c => {
       c.classList.toggle('active', c.dataset.theme === theme);
@@ -1987,52 +2199,27 @@
     toast('Accent color updated');
   }
 
-  // Save custom accent color
   function saveCustomAccent() {
     const hexInput = document.getElementById('custom-accent-hex');
     const colorInput = document.getElementById('custom-accent-color');
-    let color = hexInput.value.trim();
-    
-    // If hex input is empty, use the color picker value
-    if (!color) {
-      color = colorInput.value;
-    }
-    
-    // Validate hex color
+    let color = hexInput.value.trim() || colorInput.value;
     if (!/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
       toast('Please enter a valid hex color (e.g., #ff0000)');
       return;
     }
-    
-    // Apply the color
     setAccent(color);
-    
-    // Update the custom swatch
     const customSwatch = document.querySelector('.accent-swatch.custom-color');
-    if (customSwatch) {
-      customSwatch.style.background = color + ' !important';
-    }
-    
-    // Clear the input
+    if (customSwatch) customSwatch.style.background = color + ' !important';
     hexInput.value = '';
-    
     toast('Custom accent color saved!');
   }
 
-  // Auto-update hex input when color picker changes
+  // ---- Init ----
   document.addEventListener('DOMContentLoaded', function() {
-    const colorPicker = document.getElementById('custom-accent-color');
-    const hexInput = document.getElementById('custom-accent-hex');
-    
-    if (colorPicker) {
-      colorPicker.addEventListener('input', function() {
-        hexInput.value = this.value;
-      });
-    }
-  });
+    // Load user data
+    loadUserData();
 
-  // Apply saved settings on page load
-  document.addEventListener('DOMContentLoaded', function() {
+    // Apply theme
     const savedTheme = localStorage.getItem('theme') || 'esc';
     setTheme(savedTheme);
     
@@ -2042,39 +2229,71 @@
       document.querySelectorAll('.accent-swatch').forEach(el => {
         el.classList.toggle('active', el.dataset.color === savedAccent);
       });
-      
-      // Update custom swatch if it matches
       const customSwatch = document.querySelector('.accent-swatch.custom-color');
       if (customSwatch && !document.querySelector(`.accent-swatch[data-color="${savedAccent}"]`)) {
         customSwatch.style.background = savedAccent + ' !important';
       }
     }
-  });
 
-  // Font selector
-  const fontSelect = document.getElementById('font-select');
-  const savedFont = localStorage.getItem('font');
-  if (savedFont) {
-    fontSelect.value = savedFont;
-    document.body.style.fontFamily = savedFont + ', sans-serif';
-  }
-  fontSelect.addEventListener('change', function() {
-    document.body.style.fontFamily = this.value + ', sans-serif';
-    localStorage.setItem('font', this.value);
-    toast('Font: ' + this.value);
-  });
-
-  // Toggle switches
-  document.querySelectorAll('.switch input').forEach(el => {
-    const saved = localStorage.getItem('switch-' + el.id);
-    if (saved !== null) el.checked = saved === 'true';
-    el.addEventListener('change', function() {
-      localStorage.setItem('switch-' + this.id, this.checked);
+    // Font
+    const fontSelect = document.getElementById('font-select');
+    const savedFont = localStorage.getItem('font');
+    if (savedFont) {
+      fontSelect.value = savedFont;
+      document.body.style.fontFamily = savedFont + ', sans-serif';
+    }
+    fontSelect.addEventListener('change', function() {
+      document.body.style.fontFamily = this.value + ', sans-serif';
+      localStorage.setItem('font', this.value);
+      toast('Font: ' + this.value);
     });
+
+    // Toggle switches
+    document.querySelectorAll('.switch input').forEach(el => {
+      const saved = localStorage.getItem('switch-' + el.id);
+      if (saved !== null) el.checked = saved === 'true';
+      el.addEventListener('change', function() {
+        localStorage.setItem('switch-' + this.id, this.checked);
+      });
+    });
+
+    // Load profile form if profile tab is visible
+    if (document.getElementById('tab-profile').style.display !== 'none') {
+      loadProfileForm();
+    }
   });
 
-  // ---- Init ----
-  loadUserData();
+  // Expose functions globally
+  window.switchTab = switchTab;
+  window.goBack = goBack;
+  window.logout = logout;
+  window.openChangeUsername = openChangeUsername;
+  window.saveUsername = saveUsername;
+  window.toggleEmailVisibility = toggleEmailVisibility;
+  window.openChangeEmail = openChangeEmail;
+  window.saveEmail = saveEmail;
+  window.openChangePassword = openChangePassword;
+  window.savePassword = savePassword;
+  window.openDisableAccount = openDisableAccount;
+  window.disableAccount = disableAccount;
+  window.openDeleteAccount = openDeleteAccount;
+  window.deleteAccount = deleteAccount;
+  window.generateBackupCodes = generateBackupCodes;
+  window.addAuthenticator = addAuthenticator;
+  window.setTheme = setTheme;
+  window.setAccent = setAccent;
+  window.saveCustomAccent = saveCustomAccent;
+  window.setProfileBannerColor = setProfileBannerColor;
+  window.uploadProfileAvatar = uploadProfileAvatar;
+  window.removeProfileAvatar = removeProfileAvatar;
+  window.uploadProfileBanner = uploadProfileBanner;
+  window.removeProfileBanner = removeProfileBanner;
+  window.resetProfileForm = resetProfileForm;
+  window.saveProfileChanges = saveProfileChanges;
+  window.updateDisplayNameCounter = updateDisplayNameCounter;
+  window.updateBioCounter = updateBioCounter;
+  window.loadProfileForm = loadProfileForm;
+  window.loadUserData = loadUserData;
 </script>
 </body>
 </html>
