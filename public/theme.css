@@ -222,9 +222,9 @@ mark,
   font-weight: 700;
 }
 
-.pp-banner {
+/* .pp-banner {
   background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important;
-}
+} */
 
 /* 13. SCROLLBAR - Very subtle */
 ::-webkit-scrollbar {
@@ -432,4 +432,293 @@ body.theme-dark .dm-preview {
 
 body.theme-dark .dm-name {
   color: var(--text-primary) !important;
+}
+
+/* ---- RETRO THEME (Windows 95 / old-internet chrome) ---- */
+body.theme-retro {
+  --bg-primary: #c0c0c0;
+  --bg-secondary: #e0e0e0;
+  --bg-sidebar: #c0c0c0;
+  --bg-input: #ffffff;
+  --bg-hover: #d0d0d0;
+  --bg-active: #b0b0b0;
+  --bg-modal: #c0c0c0;
+  --bg-modal-sidebar: #bdbdbd;
+  --bg-modal-card: #ffffff;
+  --bg-modal-hover: #d4d4d4;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-muted: #666666;
+  --border-color: #808080;
+  --border-medium: #808080;
+  --shadow: none;
+  --bevel-light: #ffffff;
+  --bevel-dark: #808080;
+  --bevel-darker: #000000;
+  font-family: 'Tahoma', 'MS Sans Serif', Geneva, sans-serif !important;
+}
+
+/* Kill every rounded corner, glow and smooth transition in retro mode */
+body.theme-retro * {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+  backdrop-filter: none !important;
+}
+
+body.theme-retro a:not(.no-accent) {
+  color: #0000EE !important;
+  text-decoration: underline !important;
+}
+body.theme-retro a:not(.no-accent):visited {
+  color: #551A8B !important;
+}
+
+/* ---- BUTTONS: raised 3D bevel, inverts to inset when pressed ---- */
+body.theme-retro .btn-primary,
+body.theme-retro .wv-new-btn,
+body.theme-retro .add-friend-btn,
+body.theme-retro .msb-delete,
+body.theme-retro .edit-profile-btn,
+body.theme-retro input[type="submit"],
+body.theme-retro .btn-secondary,
+body.theme-retro .ftab,
+body.theme-retro .nav-item,
+body.theme-retro .btn-cancel,
+body.theme-retro .logout-btn,
+body.theme-retro .ch-action-btn,
+body.theme-retro .dm-action-btn,
+body.theme-retro .up-btn,
+body.theme-retro .back-btn,
+body.theme-retro .msb-cancel,
+body.theme-retro button,
+body.theme-retro select {
+  background: #c0c0c0 !important;
+  color: #000000 !important;
+  border: 2px solid !important;
+  border-color: var(--bevel-light) var(--bevel-darker) var(--bevel-darker) var(--bevel-light) !important;
+  box-shadow: inset -1px -1px 0 var(--bevel-dark), inset 1px 1px 0 #dfdfdf !important;
+  font-weight: 400 !important;
+  cursor: pointer;
+  padding: 4px 12px;
+}
+body.theme-retro .btn-primary:hover,
+body.theme-retro .wv-new-btn:hover,
+body.theme-retro .add-friend-btn:hover,
+body.theme-retro .msb-delete:hover,
+body.theme-retro .edit-profile-btn:hover,
+body.theme-retro input[type="submit"]:hover,
+body.theme-retro .btn-secondary:hover,
+body.theme-retro .ftab:hover,
+body.theme-retro .nav-item:hover,
+body.theme-retro .btn-cancel:hover,
+body.theme-retro .logout-btn:hover,
+body.theme-retro .ch-action-btn:hover,
+body.theme-retro .dm-action-btn:hover,
+body.theme-retro .up-btn:hover,
+body.theme-retro .back-btn:hover,
+body.theme-retro .msb-cancel:hover {
+  background: #d4d4d4 !important;
+  color: #000000 !important;
+  transform: none !important;
+}
+body.theme-retro .btn-primary:active,
+body.theme-retro .wv-new-btn:active,
+body.theme-retro .add-friend-btn:active,
+body.theme-retro .msb-delete:active,
+body.theme-retro .edit-profile-btn:active,
+body.theme-retro input[type="submit"]:active,
+body.theme-retro .btn-secondary:active,
+body.theme-retro .ftab:active,
+body.theme-retro .nav-item:active,
+body.theme-retro button:active {
+  border-color: var(--bevel-darker) var(--bevel-light) var(--bevel-light) var(--bevel-darker) !important;
+  box-shadow: inset 1px 1px 0 var(--bevel-dark), inset -1px -1px 0 #dfdfdf !important;
+  padding: 5px 11px 3px 13px;
+}
+
+/* ---- ACTIVE NAV/TAB STATE: inset "pressed" look instead of colored border ---- */
+body.theme-retro .nav-item.active,
+body.theme-retro .settings-sidebar .nav-item-settings.active,
+body.theme-retro .dm-item.active,
+body.theme-retro .ftab.active {
+  background: #b0b0b0 !important;
+  color: #000000 !important;
+  border: 2px solid !important;
+  border-color: var(--bevel-darker) var(--bevel-light) var(--bevel-light) var(--bevel-darker) !important;
+  box-shadow: inset 1px 1px 0 var(--bevel-dark) !important;
+  padding-left: 14px !important;
+}
+
+/* ---- INPUTS / TEXTAREA / SEARCH: inset 3D well ---- */
+body.theme-retro input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+body.theme-retro textarea,
+body.theme-retro #input-box,
+body.theme-retro #search-inner {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid !important;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark) !important;
+  box-shadow: inset 1px 1px 0 #808080 !important;
+}
+body.theme-retro input:focus,
+body.theme-retro textarea:focus,
+body.theme-retro select:focus,
+body.theme-retro #input-box:focus-within,
+body.theme-retro #search-inner:focus-within {
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark) !important;
+  outline: 1px dotted #000000 !important;
+  outline-offset: -3px;
+}
+
+/* ---- CHECKBOXES / RADIO / SWITCHES: square boxes, no accent glow ---- */
+body.theme-retro input[type="checkbox"],
+body.theme-retro input[type="radio"] {
+  accent-color: #000080 !important;
+  appearance: auto;
+}
+body.theme-retro .switch .slider {
+  background: #ffffff !important;
+  border: 2px solid !important;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark) !important;
+}
+body.theme-retro .switch input:checked + .slider {
+  background: #000080 !important;
+}
+body.theme-retro .switch .slider:before {
+  border: 1px solid #000 !important;
+  background: #c0c0c0 !important;
+}
+
+/* ---- AVATARS: square, black outline ---- */
+body.theme-retro .dm-avatar,
+body.theme-retro .ch-avatar,
+body.theme-retro .pc-avatar,
+body.theme-retro #up-avatar,
+body.theme-retro .pp-avatar,
+body.theme-retro .mini-avatar {
+  background: #c0c0c0 !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+}
+
+/* ---- BADGES: rectangular tag, not a pill ---- */
+body.theme-retro .badge,
+body.theme-retro .badge-settings,
+body.theme-retro .dm-badge {
+  background: #ff0000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  font-weight: 700;
+  padding: 1px 6px;
+}
+
+/* ---- CARDS / PANELS: raised outset frame ---- */
+body.theme-retro .welcome-card,
+body.theme-retro .settings-section,
+body.theme-retro .theme-preview-card,
+body.theme-retro .profile-card,
+body.theme-retro #toast {
+  background: #c0c0c0 !important;
+  border: 2px solid !important;
+  border-color: var(--bevel-light) var(--bevel-darker) var(--bevel-darker) var(--bevel-light) !important;
+  box-shadow: inset -1px -1px 0 var(--bevel-dark), inset 1px 1px 0 #dfdfdf !important;
+}
+body.theme-retro .welcome-card {
+  border-top: 2px solid !important;
+  border-top-color: var(--bevel-light) !important;
+}
+
+/* ---- SCROLLBAR: chunky classic square gray ---- */
+body.theme-retro ::-webkit-scrollbar {
+  width: 16px !important;
+  height: 16px !important;
+}
+body.theme-retro ::-webkit-scrollbar-track {
+  background: #dfdfdf !important;
+}
+body.theme-retro ::-webkit-scrollbar-thumb {
+  background: #c0c0c0 !important;
+  border: 2px solid !important;
+  border-color: var(--bevel-light) var(--bevel-darker) var(--bevel-darker) var(--bevel-light) !important;
+}
+body.theme-retro ::-webkit-scrollbar-thumb:hover {
+  background: #c0c0c0 !important;
+}
+
+body.theme-retro .dm-avatar {
+  background: #c0c0c0 !important;
+  color: black !important;
+  border: 1px solid black;
+}
+body.theme-retro .btn-primary {
+  background: #c0c0c0 !important;
+  color: #000 !important;
+}
+body.theme-retro .brand-small {
+  background: none !important;
+  -webkit-text-fill-color: #000 !important;
+  color: #000 !important;
+}
+body.theme-retro .pp-banner {
+  background: #c0c0c0 !important;
+}
+body.theme-retro .msg-row.outgoing .msg-author {
+  color: #0000EE !important;
+}
+body.theme-retro .reaction-pill.mine {
+  background: #c0c0c0 !important;
+  border: 1px solid #000 !important;
+}
+body.theme-retro .msg-text mark.search-hit {
+  background: #ffff00 !important;
+  color: #000 !important;
+}
+
+/* ---- SETTINGS SIDEBAR & CONTENT: proper Win95 panel chrome ---- */
+body.theme-retro .settings-container {
+  background: #808080 !important;
+}
+body.theme-retro .settings-sidebar {
+  background: #c0c0c0 !important;
+  border-right: 2px solid !important;
+  border-color: var(--bevel-darker) var(--bevel-light) var(--bevel-light) var(--bevel-darker) !important;
+}
+body.theme-retro .settings-sidebar .nav-section {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+body.theme-retro .settings-sidebar-bottom {
+  border-top: 2px solid !important;
+  border-color: var(--bevel-dark) transparent transparent transparent !important;
+}
+body.theme-retro .settings-content {
+  background: #c0c0c0 !important;
+}
+body.theme-retro .settings-content .page-title {
+  color: #000000 !important;
+}
+body.theme-retro .section-title {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+body.theme-retro .account-field,
+body.theme-retro .twofa-card,
+body.theme-retro .mgmt-card {
+  background: #ffffff !important;
+  border: 2px solid !important;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark) !important;
+}
+
+/* ---- ICONS: old toolbar icons were chunky, not thin/tiny outline glyphs.
+   Force a real minimum box size (not just a visual transform) so every icon
+   in retro mode is actually bigger, uniformly, without shrinking any icon
+   that was already bigger than this (e.g. large empty-state icons). ---- */
+body.theme-retro svg {
+  min-width: 28px !important;
+  min-height: 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  stroke-width: 2.2px !important;
 }

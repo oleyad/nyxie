@@ -409,7 +409,7 @@
       border-top: 1px solid var(--border-color);
     }
 
-    /* ---------- Account fields (unchanged) ---------- */
+    /* ---------- Account fields ---------- */
     .account-field {
       display: flex;
       align-items: center;
@@ -756,10 +756,10 @@
       white-space: nowrap;
     }
 
-    /* Appearance Styles (unchanged) */
+    /* Appearance Styles */
     .theme-preview-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin: 12px 0 24px;
     }
@@ -971,6 +971,88 @@
     }
     .dark-preview .preview-input {
       background: #2d2d2d;
+    }
+
+    /* ----- RETRO PREVIEW (Windows 95 / old-internet chrome) ----- */
+    .retro-preview {
+      background: #c0c0c0;
+      font-family: 'Tahoma', 'MS Sans Serif', Geneva, sans-serif;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #dfdfdf;
+    }
+    .retro-preview .preview-sidebar {
+      background: #c0c0c0;
+      border-right: 2px solid;
+      border-color: #808080 #ffffff #ffffff #808080;
+      padding: 3px;
+      gap: 3px;
+    }
+    .retro-preview .preview-main {
+      background: #c0c0c0;
+    }
+    .retro-preview .preview-header {
+      background: linear-gradient(90deg, #000080, #1084d0 85%, #1084d0);
+      border-bottom: none;
+      padding: 2px 4px;
+      height: 14px;
+    }
+    .retro-preview .preview-header-text {
+      background: #ffffff;
+      text-decoration: none;
+      height: 6px;
+      width: 46px;
+      border-radius: 0;
+    }
+    .retro-preview .preview-avatar-small {
+      background: #c0c0c0 !important;
+      border: 1px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      border-radius: 0 !important;
+    }
+    .retro-preview .preview-messages {
+      background: #ffffff;
+      margin: 3px;
+      border: 2px solid;
+      border-color: #808080 #ffffff #ffffff #808080;
+      padding: 4px;
+    }
+    .retro-preview .preview-msg-bubble {
+      background: #c0c0c0;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      border-radius: 0;
+    }
+    .retro-preview .preview-input {
+      background: #ffffff;
+      border: 2px solid;
+      border-color: #808080 #ffffff #ffffff #808080;
+      border-radius: 0;
+      margin: 0 3px 3px;
+    }
+    .retro-preview .preview-sidebar-item {
+      background: #0000EE;
+      border-radius: 0;
+    }
+    .retro-preview .preview-sidebar-item.active {
+      background: #000080;
+      box-shadow: inset -1px -1px 0 #1084d0, inset 1px 1px 0 #000040;
+    }
+    .retro-preview .preview-msg.right .preview-msg-bubble {
+      background: #dfdfdf;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      border-radius: 0;
+    }
+    .retro-preview .preview-msg-avatar {
+      background: #0000EE;
+      border-radius: 0;
+      border: 1px solid #000;
+    }
+    .retro-preview .preview-msg.right .preview-msg-avatar {
+      background: #0000EE;
+      border-radius: 0;
+      border: 1px solid #000;
     }
 
     .theme-preview-label {
@@ -1210,7 +1292,7 @@
         flex-wrap: wrap;
       }
       .theme-preview-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
       }
       .theme-preview {
@@ -1305,7 +1387,7 @@
   <div class="settings-content">
     <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg><span>Back to Dashboard</span></button>
 
-    <!-- My Account Tab (unchanged) -->
+    <!-- My Account Tab -->
     <div class="settings-tab" id="tab-my-account">
       <div class="page-title">My Account</div>
       <div class="account-field">
@@ -1363,10 +1445,9 @@
       <div class="settings-footer-notice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Looking to customize your public profile? Head over to your profile settings.</span></div>
     </div>
 
-    <!-- Profile Tab (redesigned) -->
+    <!-- Profile Tab -->
     <div class="settings-tab" id="tab-profile" style="display:none;">
       <div class="page-title">Profile</div>
-
       <div class="profile-edit-container">
         <!-- Avatar -->
         <div class="profile-edit-section">
@@ -1433,11 +1514,11 @@
       </div>
     </div>
 
-    <!-- Other tabs (unchanged) -->
+    <!-- Sessions Tab -->
     <div class="settings-tab" id="tab-sessions" style="display:none;"><div class="page-title">Sessions</div><p style="color:var(--text-muted);">Session management coming soon.</p></div>
     <div class="settings-tab" id="tab-voice" style="display:none;"><div class="page-title">Voice Settings</div><p style="color:var(--text-muted);">Voice settings coming soon.</p></div>
 
-    <!-- Appearance Tab (unchanged) -->
+    <!-- Appearance Tab (with Retro Theme) -->
     <div class="settings-tab" id="tab-appearance" style="display:none;">
       <div class="page-title">Appearance</div>
 
@@ -1445,6 +1526,7 @@
         <div class="section-title">THEME</div>
         
         <div class="theme-preview-grid">
+          <!-- ESC Theme -->
           <div class="theme-preview-card active" data-theme="esc" onclick="setTheme('esc')">
             <div class="theme-preview">
               <div class="theme-preview-content esc-preview">
@@ -1479,6 +1561,7 @@
             <div class="theme-preview-label">ESC</div>
           </div>
 
+          <!-- Light Theme -->
           <div class="theme-preview-card" data-theme="light" onclick="setTheme('light')">
             <div class="theme-preview">
               <div class="theme-preview-content light-preview">
@@ -1513,6 +1596,7 @@
             <div class="theme-preview-label">LIGHT</div>
           </div>
 
+          <!-- Dark Theme -->
           <div class="theme-preview-card" data-theme="dark" onclick="setTheme('dark')">
             <div class="theme-preview">
               <div class="theme-preview-content dark-preview">
@@ -1545,6 +1629,41 @@
               </div>
             </div>
             <div class="theme-preview-label">DARK</div>
+          </div>
+
+          <!-- NEW: RETRO Theme -->
+          <div class="theme-preview-card" data-theme="retro" onclick="setTheme('retro')">
+            <div class="theme-preview">
+              <div class="theme-preview-content retro-preview">
+                <div class="preview-sidebar">
+                  <div class="preview-sidebar-item active"></div>
+                  <div class="preview-sidebar-item"></div>
+                  <div class="preview-sidebar-item"></div>
+                </div>
+                <div class="preview-main">
+                  <div class="preview-header">
+                    <div class="preview-avatar-small"></div>
+                    <div class="preview-header-text"></div>
+                  </div>
+                  <div class="preview-messages">
+                    <div class="preview-msg">
+                      <div class="preview-msg-avatar"></div>
+                      <div class="preview-msg-bubble"></div>
+                    </div>
+                    <div class="preview-msg right">
+                      <div class="preview-msg-bubble"></div>
+                      <div class="preview-msg-avatar"></div>
+                    </div>
+                    <div class="preview-msg">
+                      <div class="preview-msg-avatar"></div>
+                      <div class="preview-msg-bubble"></div>
+                    </div>
+                  </div>
+                  <div class="preview-input"></div>
+                </div>
+              </div>
+            </div>
+            <div class="theme-preview-label">RETRO</div>
           </div>
         </div>
       </div>
@@ -1659,6 +1778,7 @@
       </div>
     </div>
 
+    <!-- Other tabs (unchanged) -->
     <div class="settings-tab" id="tab-notifications" style="display:none;"><div class="page-title">Notifications</div><p style="color:var(--text-muted);">Notification settings coming soon.</p></div>
     <div class="settings-tab" id="tab-language" style="display:none;"><div class="page-title">Language</div><p style="color:var(--text-muted);">Language settings coming soon.</p></div>
     <div class="settings-tab" id="tab-sync" style="display:none;"><div class="page-title">Sync</div><p style="color:var(--text-muted);">Sync settings coming soon.</p></div>
@@ -1671,7 +1791,7 @@
   </div>
 </div>
 
-<!-- Modals (unchanged) -->
+<!-- Modals -->
 <!-- Change Username -->
 <div class="overlay" id="change-username-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
@@ -1734,11 +1854,16 @@
   </div>
 </div>
 
-<!-- Delete Account -->
+<!-- Delete Account (with checkbox) -->
 <div class="overlay" id="delete-account-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
     <h2>Delete Account</h2>
     <p>This action is PERMANENT and cannot be undone. All your data will be lost.</p>
+    <!-- NEW CHECKBOX -->
+    <label style="display:flex; align-items:center; gap:8px; text-transform:none; font-weight:400; color:var(--text-secondary);">
+      <input type="checkbox" id="delete-messages-checkbox" style="width:auto; margin:0;">
+      Also delete all my messages (this cannot be undone)
+    </label>
     <label>Password</label>
     <input type="password" id="delete-password" placeholder="Your current password" />
     <div class="modal-actions">
@@ -1843,9 +1968,7 @@
       letterEl.style.display = 'block';
     }
 
-    // Banner
     applyBannerStyle(document.getElementById('profile-banner-preview'), currentUser);
-    // Update swatch active state based on current banner_color
     document.querySelectorAll('.banner-swatch').forEach(s => {
       s.classList.toggle('active', !!currentUser.banner_color && s.dataset.color.toLowerCase() === currentUser.banner_color.toLowerCase());
     });
@@ -1853,11 +1976,8 @@
       document.getElementById('profile-banner-color-custom').value = currentUser.banner_color;
     }
 
-    // Display name
     document.getElementById('profile-display-name').value = currentUser.display_name || '';
     updateDisplayNameCounter();
-
-    // Bio
     document.getElementById('profile-bio').value = currentUser.bio || '';
     updateBioCounter();
   }
@@ -1872,7 +1992,7 @@
     document.getElementById('bio-counter').textContent = val.length;
   }
 
-  let _pendingBannerColor = null; // staged color change
+  let _pendingBannerColor = null;
 
   function setProfileBannerColor(color) {
     _pendingBannerColor = color;
@@ -1908,8 +2028,6 @@
   }
 
   async function removeProfileAvatar() {
-    // There's no explicit DELETE avatar endpoint; we can set avatar to null via PATCH?
-    // For now we can just let user upload a new one. We'll skip removal.
     toast('Remove avatar not implemented, but you can upload a new one.');
   }
 
@@ -1973,7 +2091,6 @@
     const displayName = document.getElementById('profile-display-name').value.trim();
     const bio = document.getElementById('profile-bio').value.trim();
 
-    // Validate
     if (displayName.length > 32) {
       toast('Display name too long (max 32)');
       return;
@@ -2006,12 +2123,11 @@
         currentUser.display_name = res.user.display_name;
         currentUser.bio = res.user.bio;
         currentUser.banner_color = res.user.banner_color;
-        currentUser.banner = res.user.banner; // may be null if color set
+        currentUser.banner = res.user.banner;
         localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
         _pendingBannerColor = null;
         toast('Profile updated');
         loadProfileForm();
-        // Also update sidebar & other UI via loadUserData? but we're in settings, we can reload the whole user data.
         loadUserData();
       }
     } catch (err) {
@@ -2022,24 +2138,22 @@
     }
   }
 
-  // ---- Load user data (including settings header) ----
+  // ---- Load user data for display ----
   async function loadUserData() {
     const data = await api('GET', '/auth/me');
     if (data?.user) {
       currentUser = data.user;
       localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
     }
-    // Update My Account fields
     document.getElementById('settings-username').textContent = '@' + currentUser.username;
     emailVisible = false;
     document.getElementById('settings-email').textContent = '••••••••';
-    // Profile tab will be loaded when switched
     if (document.getElementById('tab-profile').style.display !== 'none') {
       loadProfileForm();
     }
   }
 
-  // ---- Other functions (unchanged) ----
+  // ---- Other account actions (unchanged) ----
   function toggleEmailVisibility() {
     emailVisible = !emailVisible;
     const el = document.getElementById('settings-email');
@@ -2160,10 +2274,12 @@
     document.getElementById('delete-password').focus();
   }
 
+  // ---- UPDATED deleteAccount with message purge flag ----
   async function deleteAccount() {
     const password = document.getElementById('delete-password').value;
+    const deleteMessages = document.getElementById('delete-messages-checkbox').checked;
     if (!password) { toast('Password is required'); return; }
-    const res = await api('DELETE', '/users/me', { password });
+    const res = await api('DELETE', '/users/me', { password, delete_messages: deleteMessages });
     if (res?.error) { toast(res.error); return; }
     toast('Account permanently deleted.');
     document.getElementById('delete-account-modal').style.display = 'none';
@@ -2173,31 +2289,9 @@
   function generateBackupCodes() { toast('Backup codes generation coming soon'); }
   function addAuthenticator() { toast('Authenticator setup coming soon'); }
 
-  // ---- Appearance (unchanged) ----
-  function updateThemePreviews(theme) {
-    document.querySelectorAll('.theme-preview-card').forEach(c => {
-      c.classList.toggle('active', c.dataset.theme === theme);
-    });
-  }
-
-  function setTheme(theme) {
-    localStorage.setItem('theme', theme);
-    document.body.className = document.body.className
-      .split(' ')
-      .filter(c => !c.startsWith('theme-'))
-      .join(' ');
-    document.body.classList.add('theme-' + theme);
-    updateThemePreviews(theme);
-    toast('Theme changed to: ' + theme.toUpperCase());
-  }
-
-  function setAccent(color) {
-    document.querySelectorAll('.accent-swatch').forEach(s => s.classList.remove('active'));
-    document.querySelector(`.accent-swatch[data-color="${color}"]`)?.classList.add('active');
-    document.documentElement.style.setProperty('--accent', color);
-    localStorage.setItem('accent', color);
-    toast('Accent color updated');
-  }
+  // ---- Appearance ----
+  // Theme + accent are handled globally by theme.js (setTheme/setAccent/applyTheme/applyAccent),
+  // shared with dashboard.html, so this page always matches whatever theme is active elsewhere.
 
   function saveCustomAccent() {
     const hexInput = document.getElementById('custom-accent-hex');
@@ -2216,26 +2310,18 @@
 
   // ---- Init ----
   document.addEventListener('DOMContentLoaded', function() {
-    // Load user data
     loadUserData();
 
-    // Apply theme
-    const savedTheme = localStorage.getItem('theme') || 'esc';
-    setTheme(savedTheme);
-    
+    // theme.js already applied the saved theme + accent on its own DOMContentLoaded
+    // listener; just sync any settings-specific UI bits (custom swatch color) here.
     const savedAccent = localStorage.getItem('accent');
     if (savedAccent) {
-      document.documentElement.style.setProperty('--accent', savedAccent);
-      document.querySelectorAll('.accent-swatch').forEach(el => {
-        el.classList.toggle('active', el.dataset.color === savedAccent);
-      });
       const customSwatch = document.querySelector('.accent-swatch.custom-color');
       if (customSwatch && !document.querySelector(`.accent-swatch[data-color="${savedAccent}"]`)) {
         customSwatch.style.background = savedAccent + ' !important';
       }
     }
 
-    // Font
     const fontSelect = document.getElementById('font-select');
     const savedFont = localStorage.getItem('font');
     if (savedFont) {
@@ -2248,7 +2334,6 @@
       toast('Font: ' + this.value);
     });
 
-    // Toggle switches
     document.querySelectorAll('.switch input').forEach(el => {
       const saved = localStorage.getItem('switch-' + el.id);
       if (saved !== null) el.checked = saved === 'true';
@@ -2257,7 +2342,6 @@
       });
     });
 
-    // Load profile form if profile tab is visible
     if (document.getElementById('tab-profile').style.display !== 'none') {
       loadProfileForm();
     }

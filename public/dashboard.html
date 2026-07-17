@@ -7,10 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <!-- Theme files -->
   <link rel="stylesheet" href="theme.css">
   <script src="theme.js"></script>
-</head>
+  <!-- E2EE libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/tweetnacl@1.0.3/nacl.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tweetnacl-util@0.15.1/nacl-util.min.js"></script>
   <style>
     /* ---------- Reset & Variables ---------- */
     * {
@@ -55,7 +56,7 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #3a3a42; border-radius: 4px; }
 
-    /* ---------- Sidebar ---------- */
+    /* Sidebar */
     #sidebar {
       width: 300px;
       flex-shrink: 0;
@@ -433,6 +434,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: var(--text-muted);
     }
     #up-tag {
       font-size: 0.72rem;
@@ -744,7 +746,6 @@
       font-style: italic;
     }
 
-    /* ---------- Inline edit box ---------- */
     .msg-edit-box {
       display: flex;
       flex-direction: column;
@@ -780,7 +781,6 @@
       text-decoration: underline;
     }
 
-    /* ---------- Confirm popover (delete etc.) ---------- */
     .confirm-popup {
       position: fixed;
       display: none;
@@ -836,7 +836,6 @@
       background: #c43638;
     }
 
-    /* ---------- Full reaction emoji picker (fixed, standalone) ---------- */
     .reaction-full-picker {
       position: fixed !important;
       bottom: auto !important;
@@ -849,11 +848,13 @@
       margin-left: 4px;
     }
     .msg-row.compact .msg-timestamp-inline {
+      display: none;
       font-size: 0.68rem;
       color: var(--text-muted);
-      opacity: 0;
-      transition: opacity 0.1s;
       margin-right: 8px;
+    }
+    .msg-row.compact:hover .msg-timestamp-inline {
+      display: inline;
     }
     .msg-row.compact .msg-content-col {
       display: flex;
@@ -909,7 +910,6 @@
       color: #fd6671;
     }
 
-    /* ---------- Reply quote ---------- */
     .msg-reply-quote {
       display: flex;
       align-items: center;
@@ -942,7 +942,6 @@
       color: var(--text-secondary);
     }
 
-    /* ---------- Reactions ---------- */
     .msg-reactions {
       display: flex;
       flex-wrap: wrap;
@@ -975,7 +974,6 @@
       font-weight: 600;
     }
 
-    /* ---------- Reaction picker popup ---------- */
     .reaction-picker-popup {
       position: fixed;
       display: none;
@@ -1024,7 +1022,6 @@
     }
     .rp-more-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-    /* ---------- More menu dropdown ---------- */
     .more-menu-popup {
       position: fixed;
       display: none;
@@ -1066,7 +1063,6 @@
       margin: 4px 2px;
     }
 
-    /* ---------- Reply preview bar (above input) ---------- */
     #reply-preview-bar {
       display: none;
       align-items: center;
@@ -1133,7 +1129,6 @@
       background: rgba(253, 102, 113, 0.08);
     }
 
-    /* ---------- In-chat search bar ---------- */
     #chat-search-bar {
       display: none;
       align-items: center;
@@ -1202,7 +1197,6 @@
       font-style: italic;
     }
 
-    /* ─── Input Area ─── */
     #input-area {
       padding: 0 16px 16px;
       position: relative;
@@ -1247,7 +1241,7 @@
       color: var(--text-primary);
       font-size: 0.9rem;
       font-family: 'Inter', sans-serif;
-      padding: 0;
+      padding: 0.5%;
       min-height: 24px;
       line-height: 1.4;
     }
@@ -1293,7 +1287,6 @@
       fill: currentColor;
     }
 
-    /* ─── Emoji Picker ─── */
     .emoji-picker {
       position: absolute;
       bottom: 110%;
@@ -1432,7 +1425,6 @@
       opacity: 1;
     }
 
-    /* ─── Shortcode Suggest Dropdown ─── */
     #shortcode-suggest {
       position: absolute;
       bottom: calc(100% + 4px);
@@ -1487,7 +1479,6 @@
       font-family: 'Monaco', 'Courier New', monospace;
     }
 
-    /* Friends Panel */
     #friends-panel {
       display: none;
       flex-direction: column;
@@ -1719,7 +1710,6 @@
       stroke-linejoin: round;
     }
 
-    /* Profile Popout */
     #profile-popout {
       position: fixed;
       bottom: 70px;
@@ -1884,7 +1874,6 @@
       font-weight: 600;
     }
 
-    /* User Profile Popout (others) */
     #user-profile-popout {
       position: fixed;
       width: 380px;
@@ -1963,7 +1952,6 @@
       padding-top: 12px;
     }
 
-    /* Modals */
     .overlay {
       position: fixed;
       inset: 0;
@@ -2212,192 +2200,48 @@
       .ep-grid { grid-template-columns: repeat(6, 1fr); }
       .ep-item { font-size: 1.1rem; min-height: 32px; }
     }
-    /* ---- ACCENT COLOR  ---- */
-    .new-message-btn {
-      background: var(--accent) !important;
-      color: #fff !important;
-      border: none !important;
-      transition: background 0.3s ease !important;
-    }
-
-    .new-message-btn:hover {
-      background: var(--accent-hover) !important;
-    }
-
-    .wv-new-btn {
-      background: var(--accent) !important;
-      color: #fff !important;
-    }
-
-    .wv-new-btn:hover {
-      background: var(--accent-hover) !important;
-    }
-
-    .dm-avatar {
-      background: var(--accent) !important;
-    }
-
-    #up-avatar {
-      background: var(--accent) !important;
-    }
-
-    .ch-avatar {
-      background: var(--accent) !important;
-    }
-
-    .nav-item.active {
-      background: var(--accent) !important;
-      color: #fff !important;
-    }
-
-    .nav-item.active svg {
-      opacity: 1 !important;
-    }
-
-    .dm-item.active {
-      background: var(--accent) !important;
-    }
-
-    .dm-item.active .dm-name {
-      color: #fff !important;
-    }
-
-    .dm-item.active .dm-preview {
-      color: rgba(255,255,255,0.7) !important;
-    }
-
-    .dm-item.active .dm-time {
-      color: rgba(255,255,255,0.6) !important;
-    }
-
-    .ftab.active {
-      background: var(--accent) !important;
-      color: #fff !important;
-    }
-
-    .brand-small {
-      background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important;
-      -webkit-background-clip: text !important;
-      background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-    }
-
-    .msg-row.outgoing .msg-author {
-      color: var(--accent) !important;
-    }
-
-    .add-friend-btn {
-      background: var(--accent) !important;
-    }
-
-    .add-friend-btn:hover {
-      background: var(--accent-hover) !important;
-    }
-
-    .dm-checkbox {
-      border-color: var(--accent) !important;
-    }
-
-    .dm-item.selected .dm-checkbox {
-      background: var(--accent) !important;
-      border-color: var(--accent) !important;
-    }
-
-    .reaction-pill.mine {
-      background: rgba(253, 102, 113, 0.15) !important;
-      border-color: var(--accent) !important;
-    }
-
-    .msg-text mark.search-hit {
-      background: rgba(253, 102, 113, 0.45) !important;
-    }
-
-    .msg-row.search-current {
-      outline: 1px solid var(--accent) !important;
-      background: rgba(253, 102, 113, 0.08) !important;
-    }
-
-    .btn-primary {
-      background: var(--accent) !important;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover) !important;
-    }
-
-    .edit-profile-btn {
-      background: var(--accent) !important;
-    }
-
-    .edit-profile-btn:hover {
-      background: var(--accent-hover) !important;
-    }
-
-    .pp-banner {
-      background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important;
-    }
-
-    .pp-avatar {
-      background: var(--accent) !important;
-    }
-
-    #user-profile-popout .up-avatar-large {
-      background: var(--accent) !important;
-    }
-
-    #up-status-pip {
-      border-color: var(--bg-sidebar) !important;
-    }
-
-    #input-box:focus-within {
-      border-color: var(--accent) !important;
-    }
-
-    #chat-search-input:focus {
-      border-color: var(--accent) !important;
-    }
-
-    .modal input:focus,
-    .modal textarea:focus {
-      border-color: var(--accent) !important;
-      outline: 2px solid var(--accent) !important;
-    }
-
-    .emoji-picker-header input:focus {
-      border: 1px solid var(--accent) !important;
-    }
-
-    .ctx-item:hover {
-      background: var(--accent) !important;
-      color: #fff !important;
-    }
-
-    .switch input:checked + .slider {
-      background: var(--accent) !important;
-    }
-
-    .msb-delete {
-      background: var(--accent) !important;
-    }
-
-    .msb-delete:hover {
-      background: var(--accent-hover) !important;
-    }
-    /* User tag/mention uses accent color */
-.dm-preview .mention,
-.msg-text .mention,
-.user-tag,
-.mention-text,
-[class*="mention"] {
-  color: var(--accent) !important;
-}
-
-/* Also for the @username display */
-.dm-preview .at-user,
-.dm-preview .mention-user,
-.chat-username-tag {
-  color: var(--accent) !important;
-}
+    /* Accent overrides */
+    .new-message-btn { background: var(--accent) !important; color: #fff !important; border: none !important; transition: background 0.3s ease !important; }
+    .new-message-btn:hover { background: var(--accent-hover) !important; }
+    .wv-new-btn { background: var(--accent) !important; color: #fff !important; }
+    .wv-new-btn:hover { background: var(--accent-hover) !important; }
+    .dm-avatar { background: var(--accent) !important; }
+    #up-avatar { background: var(--accent) !important; }
+    .ch-avatar { background: var(--accent) !important; }
+    .nav-item.active { background: var(--accent) !important; color: #fff !important; }
+    .nav-item.active svg { opacity: 1 !important; }
+    .dm-item.active { background: var(--accent) !important; }
+    .dm-item.active .dm-name { color: #fff !important; }
+    .dm-item.active .dm-preview { color: rgba(255,255,255,0.7) !important; }
+    .dm-item.active .dm-time { color: rgba(255,255,255,0.6) !important; }
+    .ftab.active { background: var(--accent) !important; color: #fff !important; }
+    .brand-small { background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+    .msg-row.outgoing .msg-author { color: var(--accent) !important; }
+    .add-friend-btn { background: var(--accent) !important; }
+    .add-friend-btn:hover { background: var(--accent-hover) !important; }
+    .dm-checkbox { border-color: var(--accent) !important; }
+    .dm-item.selected .dm-checkbox { background: var(--accent) !important; border-color: var(--accent) !important; }
+    .reaction-pill.mine { background: rgba(253, 102, 113, 0.15) !important; border-color: var(--accent) !important; }
+    .msg-text mark.search-hit { background: rgba(253, 102, 113, 0.45) !important; }
+    .msg-row.search-current { outline: 1px solid var(--accent) !important; background: rgba(253, 102, 113, 0.08) !important; }
+    .btn-primary { background: var(--accent) !important; }
+    .btn-primary:hover { background: var(--accent-hover) !important; }
+    .edit-profile-btn { background: var(--accent) !important; }
+    .edit-profile-btn:hover { background: var(--accent-hover) !important; }
+    .pp-banner { background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important; }
+    .pp-avatar { background: var(--accent) !important; }
+    #user-profile-popout .up-avatar-large { background: var(--accent) !important; }
+    #up-status-pip { border-color: var(--bg-sidebar) !important; }
+    #input-box:focus-within { border-color: var(--accent) !important; }
+    #chat-search-input:focus { border-color: var(--accent) !important; }
+    .modal input:focus, .modal textarea:focus { border-color: var(--accent) !important; outline: 2px solid var(--accent) !important; }
+    .emoji-picker-header input:focus { border: 1px solid var(--accent) !important; }
+    .ctx-item:hover { background: var(--accent) !important; color: #fff !important; }
+    .switch input:checked + .slider { background: var(--accent) !important; }
+    .msb-delete { background: var(--accent) !important; }
+    .msb-delete:hover { background: var(--accent-hover) !important; }
+    .dm-preview .mention, .msg-text .mention, .user-tag, .mention-text, [class*="mention"] { color: var(--accent) !important; }
+    .dm-preview .at-user, .dm-preview .mention-user, .chat-username-tag { color: var(--accent) !important; }
   </style>
 </head>
 <body>
@@ -2593,7 +2437,7 @@ __    __  __      __  __    __  ______  ________
             <input type="text" id="msg-input" placeholder="Message @zuko" />
             <div class="emoji-btn" id="emoji-btn" onclick="toggleEmojiPicker()">
               🙂
-              <!-- ─── Emoji Picker ─── -->
+              <!-- Emoji Picker -->
               <div class="emoji-picker" id="emoji-picker">
                 <div class="emoji-picker-header">
                   <span class="ep-search-icon">🔍</span>
@@ -2605,7 +2449,6 @@ __    __  __      __  __    __  ______  ________
                 </div>
               </div>
             </div>
-            <!-- ─── Shortcode Suggest ─── -->
             <div id="shortcode-suggest"></div>
             <button id="send-btn" title="Send">
               <svg viewBox="0 0 24 24" fill="currentColor">
@@ -2723,7 +2566,7 @@ __    __  __      __  __    __  ______  ________
   <!-- More Menu Popup -->
   <div class="more-menu-popup" id="more-menu-popup"></div>
 
-  <!-- Generic confirm popover (e.g. delete message) -->
+  <!-- Generic confirm popover -->
   <div class="confirm-popup" id="confirm-popup"></div>
 
   <!-- Full emoji picker for reactions -->
@@ -3758,6 +3601,12 @@ __    __  __      __  __    __  ______  ________
 
     function appendMessage(msg) {
       const container = document.getElementById('messages-container');
+      // Guard against duplicate renders: the server broadcasts the
+      // 'new_message' WebSocket event while it's still building the HTTP
+      // response to the POST that created it, so the WS event can arrive
+      // before sendMessage()'s own appendMessage() call. Skip if this
+      // message is already on screen.
+      if (msg.id && container.querySelector(`[data-msg-id="${msg.id}"]`)) return;
       const wasBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
       const isOwn = msg.user_id === currentUser.id;
       const msgDate = new Date(msg.created_at).toDateString();
@@ -5084,6 +4933,191 @@ __    __  __      __  __    __  ______  ________
     window.closeChatSearch = closeChatSearch;
     window.filterChatMessages = filterChatMessages;
     window.chatSearchNav = chatSearchNav;
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    //  E2EE HELPERS
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    function base64ToUint8Array(b64) {
+      return nacl.util.decodeBase64(b64);
+    }
+    function uint8ArrayToBase64(arr) {
+      return nacl.util.encodeBase64(arr);
+    }
+    function encryptMessage(plaintext, recipientPublicKeyB64, senderPrivateKeyB64) {
+      const recipientPublicKey = base64ToUint8Array(recipientPublicKeyB64);
+      const senderPrivateKey = base64ToUint8Array(senderPrivateKeyB64);
+      const nonce = nacl.randomBytes(24);
+      const encrypted = nacl.box(
+        nacl.util.decodeUTF8(plaintext),
+        nonce,
+        recipientPublicKey,
+        senderPrivateKey
+      );
+      return {
+        ciphertext: uint8ArrayToBase64(encrypted),
+        nonce: uint8ArrayToBase64(nonce)
+      };
+    }
+    function decryptMessage(ciphertextB64, nonceB64, senderPublicKeyB64, recipientPrivateKeyB64) {
+      const ciphertext = base64ToUint8Array(ciphertextB64);
+      const nonce = base64ToUint8Array(nonceB64);
+      const senderPublicKey = base64ToUint8Array(senderPublicKeyB64);
+      const recipientPrivateKey = base64ToUint8Array(recipientPrivateKeyB64);
+      const decrypted = nacl.box.open(
+        ciphertext,
+        nonce,
+        senderPublicKey,
+        recipientPrivateKey
+      );
+      if (!decrypted) return null;
+      return nacl.util.encodeUTF8(decrypted);
+    }
+
+    const publicKeyCache = new Map();
+
+    async function getPublicKey(userId) {
+      if (publicKeyCache.has(userId)) return publicKeyCache.get(userId);
+      try {
+        const res = await api('GET', `/users/${userId}`);
+        if (res?.user?.public_key) {
+          publicKeyCache.set(userId, res.user.public_key);
+          return res.user.public_key;
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    }
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    //  OVERRIDE SEND MESSAGE WITH E2EE
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    const originalSendMessage = sendMessage;
+    sendMessage = async function() {
+      const input = document.getElementById('msg-input');
+      const plaintext = input.value.trim();
+      if (!plaintext || !currentRoom) return;
+      input.value = '';
+
+      let payload = {};
+      const dm = dms.find(d => d.id === currentRoom.id);
+      if (dm && dm._otherId) {
+        const recipientPublicKey = await getPublicKey(dm._otherId);
+        if (recipientPublicKey) {
+          const privateKey = localStorage.getItem('nyxie_private_key');
+          if (privateKey) {
+            const { ciphertext, nonce } = encryptMessage(plaintext, recipientPublicKey, privateKey);
+            payload = { ciphertext, nonce };
+          } else {
+            payload = { content: plaintext };
+          }
+        } else {
+          payload = { content: plaintext };
+        }
+      } else {
+        payload = { content: plaintext };
+      }
+
+      const res = await api('POST', `/rooms/${currentRoom.id}/messages`, payload);
+      if (res?.error) { toast(res.error); return; }
+      if (res.message?.id) sentMsgIds.add(res.message.id);
+      if (replyingTo && res.message) {
+        res.message.reply_to_id = res.message.reply_to_id || replyingTo.id;
+        res.message.reply_to_author = res.message.reply_to_author || payload.reply_to_author;
+        res.message.reply_to_snippet = res.message.reply_to_snippet || payload.reply_to_snippet;
+      }
+      if (!_roomHasMessages) {
+        document.getElementById('messages-container').innerHTML = '';
+        _roomHasMessages = true;
+      }
+      cancelReply();
+      appendMessage(res.message);
+      scrollToBottom();
+      const dmObj = dms.find(d => d.id === currentRoom.id);
+      if (dmObj) {
+        dmObj.last_message = plaintext;
+        dmObj.last_message_at = Date.now();
+        dms = [dmObj, ...dms.filter(d => d.id !== dmObj.id)];
+        renderDMList();
+        document.querySelector(`[data-room-id="${currentRoom.id}"]`)?.classList.add('active');
+      }
+      closeShortcodeSuggest();
+    };
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    //  OVERRIDE APPEND MESSAGE WITH DECRYPTION
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    const originalAppendMessage = appendMessage;
+    appendMessage = async function(msg) {
+      let displayContent = msg.content;
+      let isEncrypted = false;
+      if (msg.nonce) {
+        isEncrypted = true;
+        const senderPublicKey = await getPublicKey(msg.user_id);
+        if (senderPublicKey) {
+          const privateKey = localStorage.getItem('nyxie_private_key');
+          if (privateKey) {
+            const decrypted = decryptMessage(msg.content, msg.nonce, senderPublicKey, privateKey);
+            if (decrypted !== null) {
+              displayContent = decrypted;
+              isEncrypted = false;
+            } else {
+              displayContent = '🔒 Failed to decrypt';
+            }
+          } else {
+            displayContent = '🔒 Missing private key';
+          }
+        } else {
+          displayContent = '🔒 Sender public key unknown';
+        }
+      }
+      // Patch the message for rendering
+      const origContent = msg.content;
+      msg.content = displayContent;
+      // Call original synchronous function
+      originalAppendMessage.call(this, msg);
+      // Restore
+      msg.content = origContent;
+    };
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    //  KEY GENERATION ON LOGIN
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    // We'll add this to the init block at the bottom.
+    // For completeness, we'll show the init override here.
+    (async function initWithE2EE() {
+      // ... (load user, etc., as originally)
+      // After loading currentUser, ensure private key exists
+      if (!localStorage.getItem('nyxie_private_key')) {
+        const keyPair = nacl.box.keyPair();
+        const publicKeyB64 = nacl.util.encodeBase64(keyPair.publicKey);
+        const privateKeyB64 = nacl.util.encodeBase64(keyPair.privateKey);
+        localStorage.setItem('nyxie_private_key', privateKeyB64);
+        localStorage.setItem('nyxie_public_key', publicKeyB64);
+        await api('PATCH', '/users/me', { public_key: publicKeyB64 });
+        currentUser.public_key = publicKeyB64;
+        localStorage.setItem('nyxie_user', JSON.stringify(currentUser));
+      } else {
+        // Ensure public key is on server
+        const existing = await api('GET', '/auth/me');
+        if (existing?.user && !existing.user.public_key) {
+          let pub = localStorage.getItem('nyxie_public_key');
+          if (!pub) {
+            // Regenerate
+            const keyPair = nacl.box.keyPair();
+            pub = nacl.util.encodeBase64(keyPair.publicKey);
+            const priv = nacl.util.encodeBase64(keyPair.privateKey);
+            localStorage.setItem('nyxie_private_key', priv);
+            localStorage.setItem('nyxie_public_key', pub);
+          }
+          await api('PATCH', '/users/me', { public_key: pub });
+        }
+      }
+    })()
   </script>
 </body>
 </html>

@@ -36,11 +36,17 @@ async function getMessageDb() {
       room_id TEXT NOT NULL,
       user_id TEXT NOT NULL,
       content TEXT NOT NULL,
+      nonce TEXT,
       created_at INTEGER NOT NULL,
       edited_at INTEGER,
       deleted INTEGER DEFAULT 0
     )
   `);
+
+  // Migration: older nyxie_messages.db files were created before the
+  // nonce column existed, so CREATE TABLE IF NOT EXISTS above won't add
+  // it to them. Add it if missing.
+  try { db.run("ALTER TABLE messages ADD COLUMN nonce TEXT"); } catch (e) {}
 
   persist();
   persistInterval = setInterval(persist, 5000);

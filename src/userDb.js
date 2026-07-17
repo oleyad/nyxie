@@ -30,6 +30,7 @@ async function getUserDb() {
     db = new SqlJs.Database();
   }
 
+  // Users table
   db.run(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
@@ -41,6 +42,7 @@ async function getUserDb() {
       banner TEXT,
       banner_color TEXT,
       bio TEXT,
+      public_key TEXT,          -- E2EE: base64 encoded public key
       status TEXT DEFAULT 'online',
       status_updated_at INTEGER,
       created_at INTEGER NOT NULL,
@@ -49,30 +51,25 @@ async function getUserDb() {
     )
   `);
 
-  // If table already exists but missing columns, add them (for existing DBs)
-  try {
-    db.run("ALTER TABLE users ADD COLUMN bio TEXT");
-  } catch (e) {
-    // column already exists – ignore
-  }
-  try {
-    db.run("ALTER TABLE users ADD COLUMN disabled INTEGER DEFAULT 0");
-  } catch (e) {
-    // column already exists – ignore
-  }
-  try {
-    // Path to an uploaded banner image/gif, e.g. '/banners/<file>'. Null if using a flat color instead.
-    db.run("ALTER TABLE users ADD COLUMN banner TEXT");
-  } catch (e) {
-    // column already exists – ignore
-  }
-  try {
-    // CSS color (hex/rgb) used as the banner when no image/gif is uploaded.
-    db.run("ALTER TABLE users ADD COLUMN banner_color TEXT");
-  } catch (e) {
-    // column already exists – ignore
-  }
+  // Messages table – ensure nonce column exists
+  db.run(`
+    CREATE TABLE IF NOT EXISTS messages (
+      id TEXT PRIMARY KEY,
+      room_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      content TEXT NOT NULL,
+      nonce TEXT,                -- E2EE: base64 encoded nonce
+      created_at INTEGER NOT NULL,
+      edited_at INTEGER,
+      deleted INTEGER DEFAULT 0
+    )
+  `);
 
+  // Add missing columns if they don't exist
+  try { db.run("ALTER TABLE users ADD COLUMN public_key TEXT"); } catch (e) {}
+  try { db.run("ALTER TABLE messages ADD COLUMN nonce TEXT"); } catch (e) {}
+
+  // Servers, rooms, memberships, friends tables (unchanged)
   db.run(`
     CREATE TABLE IF NOT EXISTS servers (
       id TEXT PRIMARY KEY,
@@ -82,7 +79,6 @@ async function getUserDb() {
       created_at INTEGER NOT NULL
     )
   `);
-
   db.run(`
     CREATE TABLE IF NOT EXISTS server_members (
       server_id TEXT NOT NULL,
@@ -91,7 +87,6 @@ async function getUserDb() {
       PRIMARY KEY (server_id, user_id)
     )
   `);
-
   db.run(`
     CREATE TABLE IF NOT EXISTS rooms (
       id TEXT PRIMARY KEY,
@@ -103,7 +98,6 @@ async function getUserDb() {
       is_dm INTEGER DEFAULT 0
     )
   `);
-
   db.run(`
     CREATE TABLE IF NOT EXISTS room_members (
       room_id TEXT NOT NULL,
@@ -112,7 +106,6 @@ async function getUserDb() {
       PRIMARY KEY (room_id, user_id)
     )
   `);
-
   db.run(`
     CREATE TABLE IF NOT EXISTS friend_requests (
       id TEXT PRIMARY KEY,
@@ -122,7 +115,6 @@ async function getUserDb() {
       created_at INTEGER NOT NULL
     )
   `);
-
   db.run(`
     CREATE TABLE IF NOT EXISTS friends (
       id TEXT PRIMARY KEY,

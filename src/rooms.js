@@ -115,7 +115,7 @@ router.get('/:id/messages', requireAuth, async (req, res) => {
   const before = req.query.before ? parseInt(req.query.before) : Date.now() + 1;
 
   const messages = allMessages(msgDb, `
-    SELECT id, room_id, user_id, content, created_at, edited_at, deleted
+    SELECT id, room_id, user_id, content, nonce, created_at, edited_at, deleted
     FROM messages
     WHERE room_id = ? AND created_at < ?
     ORDER BY created_at DESC
@@ -144,20 +144,27 @@ router.post('/:id/messages', requireAuth, async (req, res) => {
   const isMember = get(userDb, 'SELECT 1 FROM room_members WHERE room_id = ? AND user_id = ?', [req.params.id, req.user.id]);
   if (!isMember) return res.status(403).json({ error: 'Not a member' });
 
-  const { content } = req.body;
-  if (!content || !content.trim()) return res.status(400).json({ error: 'Message content required' });
-  if (content.length > 4000) return res.status(400).json({ error: 'Message too long' });
+  const { content, ciphertext, nonce } = req.body;
+  if (!content && !ciphertext) {
+    return res.status(400).json({ error: 'Message content or ciphertext required' });
+  }
+  const msgContent = content ? content.trim() : ciphertext;
+  const msgNonce = nonce || null;
+
+  if (!msgContent) return res.status(400).json({ error: 'Message content required' });
+  if (msgContent.length > 4000) return res.status(400).json({ error: 'Message too long' });
 
   const msgId = crypto.randomUUID();
   const now = Date.now();
   const msgDb = await getMessageDb();
-  runMessage(msgDb, 'INSERT INTO messages (id, room_id, user_id, content, created_at) VALUES (?, ?, ?, ?, ?)',
-    [msgId, req.params.id, req.user.id, content.trim(), now]);
+  runMessage(msgDb, 'INSERT INTO messages (id, room_id, user_id, content, nonce, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+    [msgId, req.params.id, req.user.id, msgContent, msgNonce, now]);
 
   const message = {
     id: msgId,
     room_id: req.params.id,
-    content: content.trim(),
+    content: msgContent,
+    nonce: msgNonce,
     created_at: now,
     user_id: req.user.id,
     username: req.user.username,

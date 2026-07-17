@@ -5,21 +5,19 @@ const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const { getUserDb, all, get, run } = require('./userDb');
+const { getMessageDb, runMessage } = require('./messageDb');
 const { requireAuth } = require('./middleware');
 
-// Ensure avatar and banner directories exist
 const AVATAR_DIR = path.join(__dirname, '..', 'data', 'avatars');
 const BANNER_DIR = path.join(__dirname, '..', 'data', 'banners');
 if (!fs.existsSync(AVATAR_DIR)) fs.mkdirSync(AVATAR_DIR, { recursive: true });
 if (!fs.existsSync(BANNER_DIR)) fs.mkdirSync(BANNER_DIR, { recursive: true });
 
-// Configure multer for avatars
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, AVATAR_DIR),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    const name = req.user.id + '-' + Date.now() + ext;
-    cb(null, name);
+    cb(null, req.user.id + '-' + Date.now() + ext);
   }
 });
 const upload = multer({
@@ -31,13 +29,11 @@ const upload = multer({
   }
 });
 
-// Configure multer for banners (images or gifs, slightly larger limit for gifs)
 const bannerStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, BANNER_DIR),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    const name = req.user.id + '-' + Date.now() + ext;
-    cb(null, name);
+    cb(null, req.user.id + '-' + Date.now() + ext);
   }
 });
 const uploadBanner = multer({
@@ -55,7 +51,7 @@ router.get('/search', requireAuth, async (req, res) => {
   const q = (req.query.q || '').trim();
   if (q.length < 2) return res.json({ users: [] });
   const users = all(db, `
-    SELECT id, username, display_name, avatar, banner, banner_color, bio, last_seen, status
+    SELECT id, username, display_name, avatar, banner, banner_color, bio, public_key, last_seen, status
     FROM users
     WHERE (username LIKE ? OR display_name LIKE ?) AND id != ?
     LIMIT 20
@@ -66,18 +62,20 @@ router.get('/search', requireAuth, async (req, res) => {
 // GET /api/users/:id
 router.get('/:id', requireAuth, async (req, res) => {
   const db = await getUserDb();
-  const user = get(db, 'SELECT id, username, display_name, avatar, banner, banner_color, bio, status, created_at, last_seen FROM users WHERE id = ?', [req.params.id]);
+  const user = get(db, `
+    SELECT id, username, display_name, avatar, banner, banner_color, bio, public_key, status, created_at, last_seen
+    FROM users WHERE id = ?
+  `, [req.params.id]);
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json({ user });
 });
 
-// PATCH /api/users/me – update profile (username, email, display_name, bio, password)
+// PATCH /api/users/me – update profile (username, email, display_name, bio, password, public_key)
 router.patch('/me', requireAuth, async (req, res) => {
   const db = await getUserDb();
-  const { username, email, display_name, bio, banner_color, current_password, new_password } = req.body;
+  const { username, email, display_name, bio, banner_color, public_key, current_password, new_password } = req.body;
   const userId = req.user.id;
 
-  // Start building updates
   const updates = [];
   const params = [];
 
@@ -91,7 +89,6 @@ router.patch('/me', requireAuth, async (req, res) => {
     if (reserved.includes(trimmed.toLowerCase())) {
       return res.status(400).json({ error: 'Username not available' });
     }
-    // Check uniqueness
     const existing = get(db, 'SELECT id FROM users WHERE username = ? AND id != ?', [trimmed, userId]);
     if (existing) return res.status(409).json({ error: 'Username already taken' });
     updates.push('username = ?');
@@ -126,8 +123,7 @@ router.patch('/me', requireAuth, async (req, res) => {
     params.push(trimmed || null);
   }
 
-  // Banner color — a flat CSS color used when no banner image/gif is set.
-  // Sending banner_color clears any uploaded banner image so the two stay mutually exclusive.
+  // Banner color
   if (banner_color !== undefined) {
     const trimmed = (banner_color || '').trim();
     const isHex = /^#[0-9a-fA-F]{3,8}$/.test(trimmed);
@@ -148,6 +144,15 @@ router.patch('/me', requireAuth, async (req, res) => {
     }
   }
 
+  // Public key (E2EE)
+  if (public_key !== undefined) {
+    if (typeof public_key !== 'string' || !/^[A-Za-z0-9+/=]+$/.test(public_key)) {
+      return res.status(400).json({ error: 'Invalid public key format' });
+    }
+    updates.push('public_key = ?');
+    params.push(public_key);
+  }
+
   // Password change
   if (current_password !== undefined || new_password !== undefined) {
     if (!current_password || !new_password) {
@@ -156,7 +161,6 @@ router.patch('/me', requireAuth, async (req, res) => {
     if (new_password.length < 8) {
       return res.status(400).json({ error: 'New password must be at least 8 characters' });
     }
-    // Verify current password
     const user = get(db, 'SELECT password_hash FROM users WHERE id = ?', [userId]);
     const match = await bcrypt.compare(current_password, user.password_hash);
     if (!match) {
@@ -166,7 +170,7 @@ router.patch('/me', requireAuth, async (req, res) => {
     updates.push('password_hash = ?');
     params.push(newHash);
   } else if (email !== undefined) {
-    // Email changes are sensitive — require current password even when not also changing password
+    // Email changes require current password
     if (!current_password) {
       return res.status(400).json({ error: 'Current password is required to change email' });
     }
@@ -185,8 +189,7 @@ router.patch('/me', requireAuth, async (req, res) => {
   const sql = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
   run(db, sql, params);
 
-  // Fetch updated user to return
-  const updated = get(db, 'SELECT id, username, email, display_name, avatar, banner, banner_color, bio, status FROM users WHERE id = ?', [userId]);
+  const updated = get(db, 'SELECT id, username, email, display_name, avatar, banner, banner_color, bio, public_key, status FROM users WHERE id = ?', [userId]);
   res.json({ ok: true, user: updated });
 });
 
@@ -201,14 +204,11 @@ router.patch('/status', requireAuth, async (req, res) => {
   res.json({ ok: true, status });
 });
 
-// POST /api/users/avatar – upload avatar
+// POST /api/users/avatar
 router.post('/avatar', requireAuth, upload.single('avatar'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No image uploaded' });
-  }
+  if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
   const avatarPath = '/avatars/' + req.file.filename;
   const db = await getUserDb();
-  // Delete old avatar if exists (avatars live in data/avatars, not public/)
   const oldUser = get(db, 'SELECT avatar FROM users WHERE id = ?', [req.user.id]);
   if (oldUser && oldUser.avatar) {
     const oldPath = path.join(AVATAR_DIR, path.basename(oldUser.avatar));
@@ -219,14 +219,11 @@ router.post('/avatar', requireAuth, upload.single('avatar'), async (req, res) =>
   res.json({ ok: true, avatar: avatarPath });
 });
 
-// POST /api/users/banner – upload a banner image or gif
+// POST /api/users/banner
 router.post('/banner', requireAuth, uploadBanner.single('banner'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No image uploaded' });
-  }
+  if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
   const bannerPath = '/banners/' + req.file.filename;
   const db = await getUserDb();
-  // Delete old banner file if exists, and clear any flat banner_color so the two stay mutually exclusive
   const oldUser = get(db, 'SELECT banner FROM users WHERE id = ?', [req.user.id]);
   if (oldUser && oldUser.banner) {
     const oldPath = path.join(BANNER_DIR, path.basename(oldUser.banner));
@@ -237,7 +234,7 @@ router.post('/banner', requireAuth, uploadBanner.single('banner'), async (req, r
   res.json({ ok: true, banner: bannerPath });
 });
 
-// DELETE /api/users/banner – remove banner (reverts to default)
+// DELETE /api/users/banner
 router.delete('/banner', requireAuth, async (req, res) => {
   const db = await getUserDb();
   const oldUser = get(db, 'SELECT banner FROM users WHERE id = ?', [req.user.id]);
@@ -249,24 +246,22 @@ router.delete('/banner', requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-// POST /api/users/disable – temporarily disable own account (requires password)
+// POST /api/users/disable – temporarily disable own account
 router.post('/disable', requireAuth, async (req, res) => {
   const db = await getUserDb();
   const { password } = req.body;
   if (!password) return res.status(400).json({ error: 'Password is required' });
-
   const user = get(db, 'SELECT password_hash FROM users WHERE id = ?', [req.user.id]);
   const match = await bcrypt.compare(password, user.password_hash);
   if (!match) return res.status(401).json({ error: 'Incorrect password' });
-
   run(db, "UPDATE users SET disabled = 1, status = 'offline' WHERE id = ?", [req.user.id]);
   res.json({ ok: true });
 });
 
-// DELETE /api/users/me – permanently delete own account (requires password)
+// DELETE /api/users/me – permanently delete own account
 router.delete('/me', requireAuth, async (req, res) => {
   const db = await getUserDb();
-  const { password } = req.body;
+  const { password, delete_messages = false } = req.body;
   if (!password) return res.status(400).json({ error: 'Password is required' });
 
   const user = get(db, 'SELECT password_hash, avatar, banner FROM users WHERE id = ?', [req.user.id]);
@@ -275,7 +270,7 @@ router.delete('/me', requireAuth, async (req, res) => {
 
   const userId = req.user.id;
 
-  // Clean up avatar and banner files (these live in data/avatars and data/banners, not public/)
+  // Clean up avatar and banner files
   if (user.avatar) {
     const avatarPath = path.join(AVATAR_DIR, path.basename(user.avatar));
     if (fs.existsSync(avatarPath)) fs.unlinkSync(avatarPath);
@@ -285,7 +280,13 @@ router.delete('/me', requireAuth, async (req, res) => {
     if (fs.existsSync(bannerPath)) fs.unlinkSync(bannerPath);
   }
 
-  // Remove memberships, friendships, friend requests, and leave DMs/channels
+  // Delete messages if requested
+  if (delete_messages) {
+    const msgDb = await getMessageDb();
+    runMessage(msgDb, 'DELETE FROM messages WHERE user_id = ?', [userId]);
+  }
+
+  // Remove memberships, friendships, friend requests
   run(db, 'DELETE FROM room_members WHERE user_id = ?', [userId]);
   run(db, 'DELETE FROM server_members WHERE user_id = ?', [userId]);
   run(db, 'DELETE FROM friends WHERE user_a = ? OR user_b = ?', [userId, userId]);
